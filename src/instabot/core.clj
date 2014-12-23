@@ -1,7 +1,9 @@
 (ns instabot.core
   (:require [clj-http.client :as client]
             [environ.core :refer [env]]
-            [clj-time.core :as t])
+            [clj-time.core :as t]
+            [clj-time.coerce :as tc]
+            [clojure.walk :as walk])
   (:use
     instagram.oauth
     instagram.callbacks
@@ -19,23 +21,18 @@
                                          redirect-uri))
 (defn get-media-blob [tagname]
   (println "get media blob")
-  (get-tagged-medias :oauth *creds* :params {:tag_name tagname}))
+  (walk/keywordize-keys (second (first (conj {} ; to get the kind of map we want
+                 (get-tagged-medias :oauth *creds* :params {:tag_name tagname}))))))
 
 (defn get-by-pagination-url [media]
-  (println "get by pagination url")
-  (let [url (get (get (get media :body) "pagination") "next_url")]
-    (client/get url)))
-  
-(defn get-next-media [tagname & [media]]
-  (if media
-    (get-by-pagination-url media)
-    (get-media-blob tagname)))
+  (let [url (get (get media :pagination) :next_url)]
+    (walk/keywordize-keys (get (client/get url {:as :json}) :body))))
 
 (defn pagination? [media]
-  (not (nil? (get (get media :body) "pagination"))))
+  (not (nil? (get (get media :pagination) :next_url))))
 
 (defn parse-content [media]
-  (get (get media :body) "data"))
+  (get media :data))
 
 ; First the a get-tagged-media to get the pagination link
 ; Then continue till there are no pagination links
@@ -43,14 +40,18 @@
 (defn get-all-tagged-media [tagname]
   (println "lets do this")
   (loop [result []
-         media (get-next-media tagname)]
+         media (get-media-blob tagname)]
     (println "We are in the loop right now")
     (println (count result))
+    ;(println (get (first (parse-content media)) "created_time"))
+    ;(println (tc/from-long (read-string (get (first (parse-content media)) "created_time"))))
+    ; If we have pagination but have extended the date we are parsing, we should stop.
+    (println (get media :pagination))
     (if (not (pagination? media))
       (conj result (parse-content media))
       (recur 
        (conj result (parse-content media)) 
-       (get-next-media tagname media)))))
+       (get-by-pagination-url media)))))
 
 ; För att få ut users från datan: (get (second (second (first (get (get tagged :body) "data")))) "from")
 ; För att få ut id från datan: (get (get (second (second (first (get (get tagged :body) "data")))) "from") "id")
