@@ -35,6 +35,9 @@
 (defn parse-content [media]
   (get media :data))
 
+
+;; Good test hashtag: #nailsgram
+
 ; First the a get-tagged-media to get the pagination link
 ; Then continue till there are no pagination links
 ; Så länge det finns pagination länkar, fortsätt att loopa
@@ -43,11 +46,12 @@
   (loop [result []
          media (get-media-blob tagname)]
     (println "We are in the loop right now")
+    (println "Number of times getting results: ")
     (println (count result))
-    ;(println (get (first (parse-content media)) "created_time"))
-    ;(println (tc/from-long (read-string (get (first (parse-content media)) "created_time"))))
+    ; Manually adding three '0' to the end of the created time string because not correct epoch format
+    (println (tc/from-long (long (read-string (str (get (first (parse-content media)) :created_time) "000")))))
     ; If we have pagination but have extended the date we are parsing, we should stop.
-    (println (get media :pagination))
+    ; TODO: add check for DATE. Parse 24 hours at a time, maximum.
     (if (not (pagination? media))
       (conj result (parse-content media))
       (recur 
