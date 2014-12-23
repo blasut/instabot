@@ -1,6 +1,7 @@
 (ns instabot.core
   (:require [clj-http.client :as client]
-            [environ.core :refer [env]])
+            [environ.core :refer [env]]
+            [clj-time.core :as t])
   (:use
     instagram.oauth
     instagram.callbacks
@@ -16,12 +17,12 @@
 (def ^:dynamic *creds* (make-oauth-creds client-id
                                          client-secret
                                          redirect-uri))
-;(def tagged (get-tagged-medias :oauth *creds* :params {:tag_name "cat"}))
-
 (defn get-media-blob [tagname]
+  (println "get media blob")
   (get-tagged-medias :oauth *creds* :params {:tag_name tagname}))
 
 (defn get-by-pagination-url [media]
+  (println "get by pagination url")
   (let [url (get (get (get media :body) "pagination") "next_url")]
     (client/get url)))
   
@@ -42,12 +43,14 @@
 (defn get-all-tagged-media [tagname]
   (println "lets do this")
   (loop [result []
-         old_media nil]
+         media (get-next-media tagname)]
     (println "We are in the loop right now")
-    (let [media (get-next-media tagname old_media)]
-      (if (pagination? media) ; What happens when there are no more media?
-        (recur (conj result (parse-content media)) media)
-        result))))
+    (println (count result))
+    (if (not (pagination? media))
+      (conj result (parse-content media))
+      (recur 
+       (conj result (parse-content media)) 
+       (get-next-media tagname media)))))
 
 ; För att få ut users från datan: (get (second (second (first (get (get tagged :body) "data")))) "from")
 ; För att få ut id från datan: (get (get (second (second (first (get (get tagged :body) "data")))) "from") "id")
