@@ -25,6 +25,7 @@
                  (get-tagged-medias :oauth *creds* :params {:tag_name tagname}))))))
 
 (defn get-by-pagination-url [media]
+  (println "get by pagination url")
   (let [url (get (get media :pagination) :next_url)]
     (walk/keywordize-keys (get (client/get url {:as :json}) :body))))
 
