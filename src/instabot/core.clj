@@ -35,30 +35,32 @@
 (defn parse-content [media]
   (get media :data))
 
+(defn within-time-range [media stop-date]
+  ; Manually adding three '0' to the end of the created time string because not correct epoch format
+  (filter (fn [image] (> (read-string (str (:created_time image) "000")) 
+                         stop-date )) media))
 
 ;; Good test hashtag: #nailsgram
 
-; First the a get-tagged-media to get the pagination link
-; Then continue till there are no pagination links
-; Så länge det finns pagination länkar, fortsätt att loopa
-(defn get-all-tagged-media [tagname]
-  (println "lets do this")
-  (loop [result []
-         media (get-media-blob tagname)]
-    (println "We are in the loop right now")
-    (println "Number of times getting results: ")
-    (println (count result))
-    ; Manually adding three '0' to the end of the created time string because not correct epoch format
-    (println (tc/from-long (long (read-string (str (get (first (parse-content media)) :created_time) "000")))))
-    ; If we have pagination but have extended the date we are parsing, we should stop.
-    ; TODO: add check for DATE. Parse 24 hours at a time, maximum.
-    (if (not (pagination? media))
-      (conj result (parse-content media))
-      (recur 
-       (conj result (parse-content media)) 
-       (get-by-pagination-url media)))))
+(defn get-all-tagged-media 
+  "This function takes a tagname to search for at instagram and an optional date (DateTime) for when to stop.
+   The stop-date defaults to start of epoch time.
+   If no DateTime is provided the function returns when there are no more media.
+   If there is no more media before the date, the function returns." 
+  ([tagname] (get-all-tagged-media tagname (t/epoch)))
+  ([tagname stop-date]
+   (let [stop-date (tc/to-long stop-date)]
+     (loop [result []
+            media (get-media-blob tagname)]
+       (let [parsed-media (parse-content media)]
+         (if (or (not (pagination? media))
+                 (= 0 (count (within-time-range parsed-media stop-date)))) ; not 0.
+           (conj result (within-time-range parsed-media stop-date))
+           (recur 
+            (conj result parsed-media) 
+            (get-by-pagination-url media))))))))
 
-; För att få ut users från datan: (get (second (second (first (get (get tagged :body) "data")))) "from")
+                                        ; För att få ut users från datan: (get (second (second (first (get (get tagged :body) "data")))) "from")
 ; För att få ut id från datan: (get (get (second (second (first (get (get tagged :body) "data")))) "from") "id")
 
 ; Problemet med get-tagged-medias är att den returnar x antal media + en pagination. Det kan vara sjukt många poster som har gjorts på hashtagen. Detta löses genom att räkna ut antal sidor och dela upp så det blir mindre än 5.000 requests per timme.
