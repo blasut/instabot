@@ -56,12 +56,37 @@
        (let [parsed-media (parse-content media)]
          (if (or (not (pagination? media))
                  (= 0 (count (within-time-range parsed-media stop-date)))) ; not 0.
-           (conj result (within-time-range parsed-media stop-date))
+           (flatten (conj result (within-time-range parsed-media stop-date)))
            (recur 
-            (conj result parsed-media) 
+            (conj result parsed-media)
             (get-by-pagination-url media))))))))
 
-                                        ; För att få ut users från datan: (get (second (second (first (get (get tagged :body) "data")))) "from")
+
+(defn get-all-users-from-media [media]
+  (let [ids (map #(get-in % [:user :id]) media)]
+    (map parse-user-data (map get-user-data ids))))
+
+(defn get-user-data [id]
+  (println "Get user data for id:" (str id))
+  (get-user :oauth *creds* :params {:user_id id}))
+
+(defn parse-user-data [blob]
+  (println "parse user data")
+  (get (get blob :body) "data"))
+
+
+
+;;;;
+; The functions highest up in the API should be composable, 
+; ->> get-all-tagged-media
+;     save-the-media
+;     get-all-the-users-from-previously-mentioned-media
+;     save-the-users
+;     [MAYBE:]
+;     get-all-images-from-user
+;     get-all-friends-of-user 
+
+; För att få ut users från datan: (get (second (second (first (get (get tagged :body) "data")))) "from")
 ; För att få ut id från datan: (get (get (second (second (first (get (get tagged :body) "data")))) "from") "id")
 
 ; Problemet med get-tagged-medias är att den returnar x antal media + en pagination. Det kan vara sjukt många poster som har gjorts på hashtagen. Detta löses genom att räkna ut antal sidor och dela upp så det blir mindre än 5.000 requests per timme.
