@@ -62,10 +62,6 @@
             (get-by-pagination-url media))))))))
 
 
-(defn get-all-users-from-media [media]
-  (let [ids (map #(get-in % [:user :id]) media)]
-    (map parse-user-data (map get-user-data ids))))
-
 (defn get-user-data [id]
   (println "Get user data for id:" (str id))
   (get-user :oauth *creds* :params {:user_id id}))
@@ -74,6 +70,9 @@
   (println "parse user data")
   (get (get blob :body) "data"))
 
+(defn get-all-users-from-media [media]
+  (let [ids (map #(get-in % [:user :id]) media)]
+    (map parse-user-data (map get-user-data ids))))
 
 
 ;;;;
