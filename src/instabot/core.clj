@@ -37,6 +37,7 @@
 
 (defn within-time-range [media stop-date]
   ; Manually adding three '0' to the end of the created time string because not correct epoch format
+  ; use: clojure.tools.reader.edn/read-string instead
   (filter (fn [image] (> (read-string (str (:created_time image) "000")) 
                          stop-date )) media))
 
