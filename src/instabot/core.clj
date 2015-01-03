@@ -75,6 +75,10 @@
     (map parse-user-data (map get-user-data ids))))
 
 
+(defn save-user [user-data])
+(defn save-image [image-data])
+
+
 ;;;;
 ; The functions highest up in the API should be composable, 
 ; ->> get-all-tagged-media

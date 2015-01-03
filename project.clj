@@ -7,12 +7,8 @@
                  [instagram-api "0.1.8"]
                  [environ "1.0.0"]
                  [clj-time "0.8.0"]
-                 [clj-http "1.0.1"]
-                 [drift "1.5.2"]
-                 [korma "0.3.0"]
-                 [org.postgresql/postgresql "9.3-1100-jdbc4"]]
-  :profiles {:dev {:plugins [[cider/cider-nrepl "0.8.2"]]}}
-  :plugins [[drift "1.5.2"]])
+                 [clj-http "1.0.1"]]
+  :profiles {:dev {:plugins [[cider/cider-nrepl "0.8.2"]]}})
 
 
 
