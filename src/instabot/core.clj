@@ -93,8 +93,8 @@
     (dorun (map #(mc/update db "users" {:_id (:_id %)} % {:upsert true}) users))
     (dorun (map #(mc/update db "media" {:_id (:_id %)} % {:upsert true}) media))))
 
-(defn wip-save-forhenne []
-  (let [media (get-all-tagged-media "forhenne")
+(defn save-a-tag [tag]
+  (let [media (get-all-tagged-media tag)
         users (get-all-users-from-media media)]
     (save-users-and-media media users)))
 
