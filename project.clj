@@ -14,7 +14,7 @@
                  [hiccup "1.0.5"]]
   :profiles {:dev {:plugins [[cider/cider-nrepl "0.8.2"]]}}
   :plugins [[lein-ring "0.8.13"]]
-  :ring {:handler instabot.core/main-routes})
+  :ring {:handler instabot.core/app})
 
 
 
