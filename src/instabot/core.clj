@@ -5,7 +5,10 @@
             [clj-time.coerce :as tc]
             [clojure.walk :as walk]
             [monger.core :as mg]
-            [monger.collection :as mc])
+            [monger.collection :as mc]
+            [compojure.core :refer :all]
+            [compojure.route :as route]
+            [ring.adapter.jetty :as ring])
   (:use
     instagram.oauth
     instagram.callbacks
@@ -80,9 +83,6 @@
   (let [ids (map #(get-in % [:user :id]) media)]
     (map parse-user-data (map get-user-data ids))))
 
-(defn save-user [user-data])
-(defn save-image [image-data])
-
 (defn save-users-and-media
   "This function takes a blob of media and a blob of users, and saves them."
   [media users]
@@ -99,5 +99,14 @@
     (save-users-and-media media users)))
 
 
+; to find all media by tag: (mc/find-maps db "media" {:tags "forhenne"})
 
+(defroutes main-routes
+  (GET "/" [] "Hello world")
+  (route/not-found "<h1>Page not found</h1>"))
 
+(def app
+  (-> (var main-routes)))
+
+(defn -main []
+  (ring/run-jetty #'routes {:port 8080}))
