@@ -106,6 +106,7 @@
 
 (defroutes main-routes
   (GET "/" [] (index))
+  (GET "/tag/:tagname" [tagname] (tag tagname (insta/get-by-tag tagname)))
   (POST "/tag" [tagname] (tag tagname (insta/get-by-tag tagname)))
   (route/resources "/")
   (route/not-found "<h1>Page not found</h1>"))
