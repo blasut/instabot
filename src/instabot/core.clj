@@ -65,8 +65,7 @@
 (defn show-tags-for-media [m]
   [:div {:class "tags"}
    [:p "Tags:"]
-   (map (fn [t] [:a {:class "tag" :href (str "/tag/" t)} t]) (:tags m))
-   ])
+   (map (fn [t] [:a {:class "tag" :href (str "/tag/" t)} t]) (:tags m))])
 
 (defn parsed-date [m]
  (clj-time.coerce/from-long (read-string (str (:created_time m) "000"))))
@@ -80,10 +79,7 @@
     [:a {:class "see-more" :href (media-route m)} "Se mer"]
     [:p (str "Likes: " (get-in m [:likes :count]))]
     [:p (str "Comments: " (get-in m [:comments :count]))]
-    [:span {:class "tags"} (show-tags-for-media m)]
-    ]
-   ]
-  )
+    [:span {:class "tags"} (show-tags-for-media m)]]])
 
 (defn tag [tagname media]
   (println tagname)
