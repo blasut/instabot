@@ -3,14 +3,20 @@
             [environ.core :refer [env]]
             [clj-time.core :as t]
             [clj-time.coerce :as tc]
-            [clojure.walk :as walk])
+            [clojure.walk :as walk]
+            [monger.core :as mg]
+            [monger.collection :as mc])
   (:use
     instagram.oauth
     instagram.callbacks
     instagram.callbacks.handlers
     instagram.api.endpoint)
   (:import
-    (instagram.callbacks.protocols SyncSingleCallback)))
+    (instagram.callbacks.protocols SyncSingleCallback)
+    ([com.mongodb MongoOptions ServerAddress])))
+
+(def conn (mg/connect))
+(def db   (mg/get-db conn "monger-test"))
 
 (def client-id (:client-id env))
 (def client-secret (:client-secret env))
@@ -74,23 +80,24 @@
   (let [ids (map #(get-in % [:user :id]) media)]
     (map parse-user-data (map get-user-data ids))))
 
-
 (defn save-user [user-data])
 (defn save-image [image-data])
 
+(defn save-users-and-media
+  "This function takes a blob of media and a blob of users, and saves them."
+  [media users]
+  (println "save users and media")
+  (let [users (map #(merge % {:_id (get % "id")}) users)
+        media (map #(merge % {:_id (get % :id)}) media)]
+    ; We have to "upsert" the users because they might already be existing.
+    (dorun (map #(mc/update db "users" {:_id (:_id %)} % {:upsert true}) users))
+    (dorun (map #(mc/update db "media" {:_id (:_id %)} % {:upsert true}) media))))
 
-;;;;
-; The functions highest up in the API should be composable, 
-; ->> get-all-tagged-media
-;     save-the-media
-;     get-all-the-users-from-previously-mentioned-media
-;     save-the-users
-;     [MAYBE:]
-;     get-all-images-from-user
-;     get-all-friends-of-user 
+(defn wip-save-forhenne []
+  (let [media (get-all-tagged-media "forhenne")
+        users (get-all-users-from-media media)]
+    (save-users-and-media media users)))
 
-; För att få ut users från datan: (get (second (second (first (get (get tagged :body) "data")))) "from")
-; För att få ut id från datan: (get (get (second (second (first (get (get tagged :body) "data")))) "from") "id")
 
 
 
