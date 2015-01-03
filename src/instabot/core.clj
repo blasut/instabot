@@ -68,13 +68,18 @@
    (map (fn [t] [:a {:class "tag" :href (str "/tag/" t)} t]) (:tags m))
    ])
 
+(defn parsed-date [m]
+ (clj-time.coerce/from-long (read-string (str (:created_time m) "000"))))
+
 (defn a-single-media [m]
   [:li {:class "media"}
    [:img {:src (get-in m [:images :standard_resolution :url])}]
    [:div {:class "metadata"} 
     [:a {:class "user" :href (str "/user/" (get-in m [:user :id]))} (get-in m [:user :username])]
-    [:span {:class "created-date"} (clj-time.coerce/from-long (read-string (str (:created_time m) "000")))]
+    [:span {:class "created-date"} (parsed-date m)]
     [:a {:class "see-more" :href (media-route m)} "Se mer"]
+    [:p (str "Likes: " (get-in m [:likes :count]))]
+    [:p (str "Comments: " (get-in m [:comments :count]))]
     [:span {:class "tags"} (show-tags-for-media m)]
     ]
    ]
