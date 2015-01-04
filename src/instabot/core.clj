@@ -38,9 +38,7 @@
   (POST "/tag" [tagname] (views/tag tagname (insta/get-by-tag tagname)))
   (GET "/media/:id" [id] (views/media (insta/get-media-by-id id)))
   (GET "/user/:id" [id] (views/user (insta/get-user-by-id id)))
-  (GET "/user/:id/media" [id] (views/user-media 
-                               (insta/get-user-by-id id)
-                               (insta/get-media-by-user-id id)))
+  (GET "/user/:id/media" [id] (views/user-media (insta/get-user-by-id id) (insta/get-media-by-user-id id)))
   (route/resources "/")
   (route/not-found "<h1>Page not found</h1>"))
 
