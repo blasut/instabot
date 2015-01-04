@@ -32,6 +32,9 @@
 (defn media-route [m]
   (str "/media/" (:_id m)))
 
+(defn user-media-route [u]
+  (str "/user/" (:_id u) "/media"))
+
 (defn show-tags-for-media [m]
   [:div {:class "tags"}
    [:p "Tags:"]
@@ -91,9 +94,16 @@
           [:p (str "Media: " (get-in u [:counts :media]))]
           [:p (str "Followed by: " (get-in u [:counts :followed_by]))]
           [:p (str "Follows: " (get-in u [:counts :follows]))]
-          [:p [:a {:href "/"} "The users media"]]]))
+          [:p [:a {:href (user-media-route u)} "The users media"]]]))
  
 
 ; GET /user/:id/media
 ; Show all media related to the user.
 
+(defn user-media [user media]
+  (common "Users media"
+          [:div (str "User: " (:username user))
+           [:p (str "Total number of media: " (count media))]
+           [:ul {:class "medias"} (map
+                 (fn [m] (a-single-media m))
+                 media)]]))

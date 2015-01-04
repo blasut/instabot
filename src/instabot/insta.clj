@@ -103,3 +103,6 @@
 
 (defn get-user-by-id [id]
   (mc/find-one-as-map db "users" { :_id id }))
+
+(defn get-media-by-user-id [id]
+  (mc/find-maps db "media" {"user.id" id}))
