@@ -7,6 +7,12 @@ ul {
     padding: 0;
     margin: 0;
 }
+/* INDEX */
+.index .tag {
+    display: inline-block;
+    margin-right: 10px;
+}
+
 .medias {
     width: 500px;
     margin: auto;

@@ -22,16 +22,19 @@
 
 ; INDEX: Search for tag.
 ; Perhaps show available tags here?
-(defn index []
+(defn index [tags]
   (common "instabot"
-          [:div 
+          [:div {:class "index"}
            (form/form-to 
             [:post "/tag"]
             (form/label "tagname" "Tagname:")
             (form/text-field "tagname")
             (form/submit-button "Submit"))
            [:p
-            [:a {:href "/spaningar"} "Spaningar"]]]))
+            [:a {:href "/spaningar"} "Spaningar"]]
+           [:p 
+            [:p "alla taggar:"]
+            (map (fn [t] [:a {:class "tag" :href (str "/tag/" t)} t]) tags)]]))
 
 (defn media-route [m]
   (str "/media/" (:_id m)))
@@ -39,7 +42,7 @@
 (defn user-media-route [u]
   (str "/user/" (:_id u) "/media"))
 
-(defn show-tags-for-media [m]
+(defn show-tags [m]
   [:div {:class "tags"}
    [:p "Tags:"]
    (map (fn [t] [:a {:class "tag" :href (str "/tag/" t)} t]) (:tags m))])
@@ -62,7 +65,7 @@
     [:a {:class "see-more" :href (media-route m)} "Se mer"]
     [:p "Likes: " (get-in m [:likes :count])]
     [:p "Comments: " (get-in m [:comments :count])]
-    [:span {:class "tags"} (show-tags-for-media m)]]])
+    [:span {:class "tags"} (show-tags m)]]])
 
 (defn tag [tagname media]
   (common (str "Tag: " (str tagname))

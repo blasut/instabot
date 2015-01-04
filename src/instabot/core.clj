@@ -10,7 +10,7 @@
             [schejulure.core :as schejulure]))
 
 (defroutes main-routes
-  (GET "/" [] (views/index))
+  (GET "/" [] (views/index (insta/get-tag-list)))
   (GET "/tag/:tagname" [tagname] (views/tag tagname (insta/get-by-tag tagname)))
   (POST "/tag" [tagname] (views/tag tagname (insta/get-by-tag tagname)))
   (GET "/media/:id" [id] (views/media (insta/get-media-by-id id)))
