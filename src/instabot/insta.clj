@@ -6,7 +6,8 @@
             [clojure.walk :as walk]
             [monger.core :as mg]
             [monger.collection :as mc]
-            [instabot.db :refer :all])
+            [instabot.db :refer :all]
+            [throttler.core :refer [throttle-chan throttle-fn fn-throttler]])
   (:use
     instagram.oauth
     instagram.callbacks
@@ -14,6 +15,8 @@
     instagram.api.endpoint)
   (:import
     (instagram.callbacks.protocols SyncSingleCallback)))
+
+(def api-throttler (fn-throttler 5000 :hour))
 
 (def client-id (:client-id env))
 (def client-secret (:client-secret env))
@@ -31,6 +34,12 @@
   (println "get by pagination url")
   (let [url (get (get media :pagination) :next_url)]
     (walk/keywordize-keys (get (client/get url {:as :json}) :body))))
+
+(defn slow-get-by-pagination-url [media]
+  (api-throttler (get-by-pagination-url media)))
+
+(defn slow-get-media-blob [tagname]
+  (api-throttler (get-media-blob tagname)))
 
 (defn pagination? [media]
   (not (nil? (get (get media :pagination) :next_url))))
@@ -59,6 +68,8 @@
    If there is no more media before the date, the function returns." 
   ([tagname] (get-all-tagged-media tagname (t/epoch)))
   ([tagname stop-date]
+   (println "get all tagged media")
+   (println tagname)
    (let [stop-date (fix-date stop-date)]
      (loop [result []
             media (get-media-blob tagname)]
@@ -75,6 +86,9 @@
   (println "Get user data for id:" (str id))
   (get-user :oauth *creds* :params {:user_id id}))
 
+(defn slow-get-user-data [id]
+  (api-throttler (get-user-data id)))
+
 (defn parse-user-data [blob]
   (println "parse user data")
   (get (get blob :body) "data"))
@@ -90,10 +104,13 @@
   (let [users (map #(merge % {:_id (get % "id")}) users)
         media (map #(merge % {:_id (get % :id)}) media)]
     ; We have to "upsert" the users because they might already be existing.
+    (println "finished mapping over data")
     (dorun (map #(mc/update db "users" {:_id (:_id %)} % {:upsert true}) users))
     (dorun (map #(mc/update db "media" {:_id (:_id %)} % {:upsert true}) media))))
 
 (defn fetch-and-save-a-tag [tag stop-date]
+  (println "fetch and save a tag")
+  (println tag stop-date)
   (let [media (get-all-tagged-media tag stop-date)
         users (get-all-users-from-media media)]
     (save-users-and-media media users)))
