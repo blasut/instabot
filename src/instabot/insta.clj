@@ -97,3 +97,9 @@
 
 (defn get-by-tag [tag]
   (mc/find-maps db "media" {:tags tag}))
+
+(defn get-media-by-id [id]
+  (mc/find-one-as-map db "media" { :_id id }))
+
+(defn get-user-by-id [id]
+  (mc/find-one-as-map db "users" { :_id id }))

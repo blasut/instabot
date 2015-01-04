@@ -67,14 +67,20 @@
    [:p "Tags:"]
    (map (fn [t] [:a {:class "tag" :href (str "/tag/" t)} t]) (:tags m))])
 
+(defn format-date [date-string]
+  (clj-time.coerce/from-long (read-string (str date-string "000"))))
+
 (defn parsed-date [m]
- (clj-time.coerce/from-long (read-string (str (:created_time m) "000"))))
+ (format-date (:created_time m)))
+
+(defn username-link [id username]
+  [:a {:class "user" :href (str "/user/" id)} username])
 
 (defn a-single-media [m]
   [:li {:class "media"}
    [:img {:src (get-in m [:images :standard_resolution :url])}]
    [:div {:class "metadata"} 
-    [:a {:class "user" :href (str "/user/" (get-in m [:user :id]))} (get-in m [:user :username])]
+    (username-link (get-in m [:user :id]) (get-in m [:user :username]))
     [:span {:class "created-date"} (parsed-date m)]
     [:a {:class "see-more" :href (media-route m)} "Se mer"]
     [:p (str "Likes: " (get-in m [:likes :count]))]
@@ -82,7 +88,6 @@
     [:span {:class "tags"} (show-tags-for-media m)]]])
 
 (defn tag [tagname media]
-  (println tagname)
   (common (str "Tag: " (str tagname))
           [:div
            [:h1 tagname]
@@ -90,7 +95,32 @@
                  (fn [m] (a-single-media m))
                  media)]]))
 
-(defn media [id])
+(defn media [m]
+  (common "media"
+          [:div
+           [:h1 "Media"]
+           [:ul {:class "medias"} (a-single-media m)]
+           [:ul (map 
+                 (fn [c] [:div {:class "comment"} 
+                          [:p 
+                           (username-link (get-in c [:from :id]) (get-in c [:from :username]))
+                           [:span (format-date (:created_time c))]]
+                          [:img {:class "profile-picture" :src (get-in c [:from :profile_picture])}]
+                          [:p (:text c)]]) 
+                 (get-in m [:comments :data]))]]))
+
+(defn user [u]
+ (common "User" 
+         [:div 
+          [:p (:username u)]
+          [:p (:bio u)]
+          [:p (:website u)]
+          [:p (:full_name u)]
+          [:p [:img {:src (:profile_picture u)}]]
+          [:p (str "Media: " (get-in u [:counts :media]))]
+          [:p (str "Followed by: " (get-in u [:counts :followed_by]))]
+          [:p (str "Follows: " (get-in u [:counts :follows]))]
+          [:p [:a {:href "/"} "The users media"]]]))
  
 ; POST /tags/:tag_name
 ; Show the media with the tagname.
@@ -109,6 +139,8 @@
   (GET "/" [] (index))
   (GET "/tag/:tagname" [tagname] (tag tagname (insta/get-by-tag tagname)))
   (POST "/tag" [tagname] (tag tagname (insta/get-by-tag tagname)))
+  (GET "/media/:id" [id] (media (insta/get-media-by-id id)))
+  (GET "/user/:id" [id] (user (insta/get-user-by-id id)))
   (route/resources "/")
   (route/not-found "<h1>Page not found</h1>"))
 

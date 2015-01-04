@@ -8,13 +8,13 @@ ul {
     margin: 0;
 }
 .medias {
-    width: 400px;
+    width: 500px;
     margin: auto;
 }
 .medias .media {
     margin: 15px 0;
     border-bottom: 1px solid #ccc;
-    max-width: 400px;
+    max-width: 500px;
     list-style: none;
 }
 
@@ -23,7 +23,7 @@ ul {
 }
 
 .medias .media img {
-    max-width: 400px;
+    max-width: 500px;
 }
 
 .medias .media .metadata .created-date {
@@ -35,7 +35,7 @@ ul {
 }
 /* TAGS */
 .media .tags {
-    max-width: 400px;
+    max-width: 500px;
 }
 .media .tags .tag {
     display: inline-block;
@@ -43,4 +43,22 @@ ul {
 }
 .media .tags .tag:last-child {
     margin-right: 0;
+}
+
+/* A single media */
+.comment {
+    max-width: 490px;
+    border: 1px solid #ccc;
+    margin: 10px auto;
+    padding: 5px;
+    overflow: auto;
+}
+.comment a {
+    display:inline-block;
+    margin-right: 10px;
+}
+.comment .profile-picture {
+    float:left;
+    width: 50px;
+    margin-right: 10px;
 }
