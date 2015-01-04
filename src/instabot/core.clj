@@ -17,6 +17,7 @@
   (GET "/spaningar" [] (views/spaningar (spaning/all)))
   (GET "/spaningar/new" [] (views/spaningar-new))
   (POST "/spaningar" req (views/spaning (spaning/create (:params req))))
+  (GET "/spaningar/:id/destroy" [id] (views/spaning-deleted (spaning/delete id)))
   (route/resources "/")
   (route/not-found "<h1>Page not found</h1>"))
 

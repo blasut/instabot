@@ -140,7 +140,8 @@
   [:li 
    [:p (:tagname s)]
    [:p "Start date: " (:start_date s)]
-   [:p "End date: " (:end_date s)]])
+   [:p "End date: " (:end_date s)]
+   [:p [:a {:href (str "/spaningar/" (:_id s) "/destroy")} "Ta bort"]]])
 
 (defn spaningar [spaningar]
   (common "Spaningar"
@@ -172,6 +173,20 @@
 (defn spaning [s]
   (common "Spaningar"
           [:div "Hej"
-           [:p "Nuvarande spaningar: "]
+           [:p "Nu haru skapat en spaning: "]
+           [:ul
+            (single-spaning s)]
            [:p 
-            [:a {:href "/spaningar/new"} "Skapa ny"]]]))
+            [:a {:href "/spaningar/new"} "Skapa ny"]]
+           [:p 
+            [:a {:href "/spaningar"} "Alla"]]]))
+
+(defn spaning-deleted [s]
+  (common "Spaningar"
+          [:div "Hej"
+           [:p "Borttaggen"]
+           [:p s]
+           [:p 
+            [:a {:href "/spaningar/new"} "Skapa ny"]]
+           [:p 
+            [:a {:href "/spaningar"} "Alla"]]]))
