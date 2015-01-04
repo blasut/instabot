@@ -28,20 +28,20 @@
                                          client-secret
                                          redirect-uri))
 (defn get-media-blob [tagname]
-  (println "get media blob")
+  (println (clj-time.core/now) "get media blob")
   (walk/keywordize-keys (second (first (conj {} ; to get the kind of map we want
                  (get-tagged-medias :oauth *creds* :params {:tag_name tagname}))))))
 
 (defn get-by-pagination-url [media]
-  (println "get by pagination url")
+  (println (clj-time.core/now) "get by pagination url")
   (let [url (get (get media :pagination) :next_url)]
     (walk/keywordize-keys (get (client/get url {:as :json}) :body))))
 
-(defn slow-get-by-pagination-url [media]
-  (api-throttler (get-by-pagination-url media)))
+(def slow-get-by-pagination-url
+  (api-throttler get-by-pagination-url))
 
-(defn slow-get-media-blob [tagname]
-  (api-throttler (get-media-blob tagname)))
+(def slow-get-media-blob
+  (api-throttler get-media-blob))
 
 (defn pagination? [media]
   (not (nil? (get (get media :pagination) :next_url))))
@@ -74,22 +74,22 @@
    (println tagname)
    (let [stop-date (fix-date stop-date)]
      (loop [result []
-            media (get-media-blob tagname)]
+            media (slow-get-media-blob tagname)]
        (let [parsed-media (parse-content media)]
          (if (or (not (pagination? media))
                  (= 0 (count (within-time-range parsed-media stop-date)))) ; not 0.
            (flatten (conj result (within-time-range parsed-media stop-date)))
            (recur 
             (conj result parsed-media)
-            (get-by-pagination-url media))))))))
+            (slow-get-by-pagination-url media))))))))
 
 
 (defn get-user-data [id]
   (println "Get user data for id:" (str id))
   (get-user :oauth *creds* :params {:user_id id}))
 
-(defn slow-get-user-data [id]
-  (api-throttler (get-user-data id)))
+(def slow-get-user-data
+  (api-throttler get-user-data))
 
 (defn parse-user-data [blob]
   (println "parse user data")
@@ -97,21 +97,21 @@
 
 (defn get-all-users-from-media [media]
   (let [ids (map #(get-in % [:user :id]) media)]
-    (map parse-user-data (map get-user-data ids))))
+    (map parse-user-data (map slow-get-user-data ids))))
 
 (defn save-users-and-media
   "This function takes a blob of media and a blob of users, and saves them."
   [media users]
-  (println "save users and media")
+  (println (clj-time.core/now) "save users and media")
   (let [users (map #(merge % {:_id (get % "id")}) users)
         media (map #(merge % {:_id (get % :id)}) media)]
     ; We have to "upsert" the users because they might already be existing.
-    (println "finished mapping over data")
+    (println (clj-time.core/now) "finished mapping over data")
     (dorun (map #(mc/update db "users" {:_id (:_id %)} % {:upsert true}) users))
     (dorun (map #(mc/update db "media" {:_id (:_id %)} % {:upsert true}) media))))
 
 (defn fetch-and-save-a-tag [tag stop-date]
-  (println "fetch and save a tag")
+  (println (clj-time.core/now) "fetch and save a tag")
   (println tag stop-date)
   (let [media (get-all-tagged-media tag stop-date)
         users (get-all-users-from-media media)]
