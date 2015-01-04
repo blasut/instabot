@@ -6,6 +6,8 @@
             [clojure.walk :as walk]
             [monger.core :as mg]
             [monger.collection :as mc]
+            [monger.operators :refer :all]
+            [monger.query :as mq]
             [instabot.db :refer :all]
             [throttler.core :refer [throttle-chan throttle-fn fn-throttler]])
   (:use
@@ -116,7 +118,9 @@
     (save-users-and-media media users)))
 
 (defn get-by-tag [tag]
-  (mc/find-maps db "media" {:tags tag}))
+  (mq/with-collection db "media"
+  (mq/find {:tags tag})
+  (mq/sort (sorted-map :created_time -1))))
 
 (defn get-media-by-id [id]
   (mc/find-one-as-map db "media" { :_id id }))
