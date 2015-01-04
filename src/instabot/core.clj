@@ -44,7 +44,7 @@
     [:title title]]
    [:body
     [:div {:id "header"}
-     [:h1 {:class "container"} "Instabot"]]
+     [:h1 {:class "container"} [:a {:href "/"} "Instabot"]]]
     [:div {:id "content" :class "container"} body]]))
 
 
@@ -91,6 +91,7 @@
   (common (str "Tag: " (str tagname))
           [:div
            [:h1 tagname]
+           [:p (str "Total number of media: " (count media))]
            [:ul {:class "medias"} (map
                  (fn [m] (a-single-media m))
                  media)]]))
