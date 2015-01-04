@@ -58,15 +58,15 @@
     (username-link (get-in m [:user :id]) (get-in m [:user :username]))
     [:span {:class "created-date"} (parsed-date m)]
     [:a {:class "see-more" :href (media-route m)} "Se mer"]
-    [:p (str "Likes: " (get-in m [:likes :count]))]
-    [:p (str "Comments: " (get-in m [:comments :count]))]
+    [:p "Likes: " (get-in m [:likes :count])]
+    [:p "Comments: " (get-in m [:comments :count])]
     [:span {:class "tags"} (show-tags-for-media m)]]])
 
 (defn tag [tagname media]
   (common (str "Tag: " (str tagname))
           [:div
            [:h1 tagname]
-           [:p (str "Total number of media: " (count media))]
+           [:p "Total number of media: " (count media)]
            [:ul {:class "medias"} (map
                  (fn [m] (a-single-media m))
                  media)]]))
@@ -93,9 +93,9 @@
           [:p (:website u)]
           [:p (:full_name u)]
           [:p [:img {:src (:profile_picture u)}]]
-          [:p (str "Media: " (get-in u [:counts :media]))]
-          [:p (str "Followed by: " (get-in u [:counts :followed_by]))]
-          [:p (str "Follows: " (get-in u [:counts :follows]))]
+          [:p "Media: " (get-in u [:counts :media])]
+          [:p "Followed by: " (get-in u [:counts :followed_by])]
+          [:p "Follows: " (get-in u [:counts :follows])]
           [:p [:a {:href (user-media-route u)} "The users media"]]]))
  
 
@@ -104,8 +104,8 @@
 
 (defn user-media [user media]
   (common "Users media"
-          [:div (str "User: " (:username user))
-           [:p (str "Total number of media: " (count media))]
+          [:div "User: " (:username user)
+           [:p "Total number of media: " (count media)]
            [:ul {:class "medias"} (map
                  (fn [m] (a-single-media m))
                  media)]]))
