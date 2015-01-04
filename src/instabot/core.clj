@@ -27,7 +27,7 @@
 (defn run-spaningar []
   (println "run spaningar")
   (let [spaningar (spaning/all)]
-    (dorun (map #(insta/fetch-and-save-a-tag (:tagname %) (:start_date %)) spaningar))))
+    (dorun (map #(future (insta/fetch-and-save-a-tag (:tagname %) (:start_date %))) spaningar))))
 
 (def app
   (ring-params/wrap-params main-routes))
