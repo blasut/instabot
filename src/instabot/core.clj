@@ -4,41 +4,19 @@
             [ring.adapter.jetty :as ring]
             [ring.middleware.params :as ring-params]
             [instabot.insta :as insta]
+            [instabot.spaning :as spaning]
             [instabot.views :as views]))
-;
-; TODO:
-; SPANINGAR: 
-;
-; GET /spaningar
-; Show all 'spaningar'
-;
-; GET /spaningar/:id
-; Show the 'spaning', including edit button
-; 
-; GET /spaningar/new
-; Show the form for creating a new spaning.
-; 
-; POST /spaningar/
-; Create a new spaning
-;
-; GET /spaningar/:id/edit
-; Show the edit form for the 'spaning'
-;
-; PUT /spaningar/:id
-; Save the updated spaning
-;
-; DELETE /spaningar/:id
-; Delete the spaning.
-;
-
 
 (defroutes main-routes
-  (GET "/" [] (index))
+  (GET "/" [] (views/index))
   (GET "/tag/:tagname" [tagname] (views/tag tagname (insta/get-by-tag tagname)))
   (POST "/tag" [tagname] (views/tag tagname (insta/get-by-tag tagname)))
   (GET "/media/:id" [id] (views/media (insta/get-media-by-id id)))
   (GET "/user/:id" [id] (views/user (insta/get-user-by-id id)))
   (GET "/user/:id/media" [id] (views/user-media (insta/get-user-by-id id) (insta/get-media-by-user-id id)))
+  (GET "/spaningar" [] (views/spaningar (spaning/all)))
+  (GET "/spaningar/new" [] (views/spaningar-new))
+  (POST "/spaningar" req (views/spaning (spaning/create (:params req))))
   (route/resources "/")
   (route/not-found "<h1>Page not found</h1>"))
 

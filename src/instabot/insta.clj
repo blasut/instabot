@@ -5,18 +5,15 @@
             [clj-time.coerce :as tc]
             [clojure.walk :as walk]
             [monger.core :as mg]
-            [monger.collection :as mc])
+            [monger.collection :as mc]
+            [instabot.db :refer :all])
   (:use
     instagram.oauth
     instagram.callbacks
     instagram.callbacks.handlers
     instagram.api.endpoint)
   (:import
-    (instagram.callbacks.protocols SyncSingleCallback)
-    ([com.mongodb MongoOptions ServerAddress])))
-
-(def conn (mg/connect))
-(def db   (mg/get-db conn "monger-test"))
+    (instagram.callbacks.protocols SyncSingleCallback)))
 
 (def client-id (:client-id env))
 (def client-secret (:client-secret env))

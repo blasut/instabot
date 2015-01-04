@@ -27,7 +27,9 @@
             [:post "/tag"]
             (form/label "tagname" "Tagname:")
             (form/text-field "tagname")
-            (form/submit-button "Submit"))]))
+            (form/submit-button "Submit"))
+           [:p
+            [:a {:href "/spaningar"} "Spaningar"]]]))
 
 (defn media-route [m]
   (str "/media/" (:_id m)))
@@ -107,3 +109,69 @@
            [:ul {:class "medias"} (map
                  (fn [m] (a-single-media m))
                  media)]]))
+
+;
+; TODO:
+; SPANINGAR: 
+;
+; GET /spaningar
+; Show all 'spaningar'
+;
+; GET /spaningar/:id
+; Show the 'spaning', including edit button
+; 
+; GET /spaningar/new
+; Show the form for creating a new spaning.
+; 
+; POST /spaningar/
+; Create a new spaning
+;
+; GET /spaningar/:id/edit
+; Show the edit form for the 'spaning'
+;
+; PUT /spaningar/:id
+; Save the updated spaning
+;
+; DELETE /spaningar/:id
+; Delete the spaning.
+;
+
+(defn single-spaning [s]
+  [:li 
+   [:p (:tagname s)]
+   [:p "Start date: " (:start_date s)]
+   [:p "End date: " (:end_date s)]])
+
+(defn spaningar [spaningar]
+  (common "Spaningar"
+          [:div "Hej"
+           [:p 
+            [:a {:href "/spaningar/new"} "Skapa ny"]]
+           [:p "Nuvarande spaningar: "]
+           [:ul
+            (map #(single-spaning %) spaningar)]]))
+
+(defn spaningar-new []
+  (common "Create spaning"
+          [:div {:class "spaning new"} "Create new spaning."
+           (form/form-to 
+            [:post "/spaningar"]
+
+            (form/label "tagname" "Tagname (without the #):")
+            (form/text-field "tagname")
+
+            (form/label "start_date" "Start date:")
+            (form/text-field "start_date")
+
+            (form/label "end_date" "End date:")
+            (form/text-field "end_date")
+
+            (form/submit-button "Submit"))
+           ]))
+
+(defn spaning [s]
+  (common "Spaningar"
+          [:div "Hej"
+           [:p "Nuvarande spaningar: "]
+           [:p 
+            [:a {:href "/spaningar/new"} "Skapa ny"]]]))

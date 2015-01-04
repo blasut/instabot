@@ -62,3 +62,15 @@ ul {
     width: 50px;
     margin-right: 10px;
 }
+
+/* Create a spaning */
+.spaning form {
+    margin-top: 10px;
+}
+.spaning label {
+    display:block;
+}
+.spaning input {
+    display:block;
+    margin-bottom: 15px;
+}
