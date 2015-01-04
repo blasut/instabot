@@ -28,7 +28,7 @@
 (defn run-spaningar []
   (println (clj-time.core/now) "run spaningar")
   (let [spaningar (spaning/all)]
-    ; start date is either the time of the last image on this tag, or if no images exist its the spanings start date
+    ; TODO: start date is either the time of the last image on this tag, or if no images exist its the spanings start date
     (dorun (map #(insta/fetch-and-save-a-tag (:tagname %) (:start_date %)) spaningar))))
 
 (def app

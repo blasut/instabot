@@ -51,7 +51,8 @@ FIXME
 - ✓ Create an web-interface to view the images of each "Spaning".
 - ✓ Create an web-interface to view the data about each user.
 - ✓ Create an web-interface to manage each "Spaning". Basic CRUD.
-- # Fix throttling.
+- ✓ Fix throttling.
+- # Fix start date on spaningar.
 - # Save the images.
 
 
