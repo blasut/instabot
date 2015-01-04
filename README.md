@@ -53,6 +53,7 @@ FIXME
 - ✓ Create an web-interface to manage each "Spaning". Basic CRUD.
 - ✓ Fix throttling.
 - # Fix start date on spaningar.
+- # Update spaningar to be either hashtag or user.
 - # Save the images.
 
 
