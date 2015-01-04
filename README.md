@@ -46,11 +46,11 @@ FIXME
 - ✓ Save the individual images in a database
 - ✓ Save the user information.
 - ✓ Fix an update user function, which uses the instagram ID as UID.
-- # Create "Spaningar", which is a that every [time] the script goes out to find the new images with the hashtag, untill the DateTime of the last fetch for the spaning.
+- ✓ Create "Spaningar", which is a that every [time] the script goes out to find the new images with the hashtag, untill the DateTime of the last fetch for the spaning.
 - # Fix something that regurlary runs the Spaningar. Probably CRON, easy to run.
-- # Create an web-interface to view the images of each "Spaning".
-- # Create an web-interface to view the data about each user.
-- # Create an web-interface to manage each "Spaning". Basic CRUD.
+- ✓ Create an web-interface to view the images of each "Spaning".
+- ✓ Create an web-interface to view the data about each user.
+- ✓ Create an web-interface to manage each "Spaning". Basic CRUD.
 
 
 Copyright © 2014 FIXME
