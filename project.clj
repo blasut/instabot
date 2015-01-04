@@ -14,8 +14,12 @@
                  [hiccup "1.0.5"]
                  [schejulure "1.0.1"]
                  [throttler "1.0.0"]]
-  :profiles {:dev {:plugins [[cider/cider-nrepl "0.8.2"]]}}
+  :profiles {:dev {:plugins [[cider/cider-nrepl "0.8.2"]]}
+             :uberjar {:aot :all}}
   :plugins [[lein-ring "0.8.13"]]
+  :main instabot.core
+  :uberjar-name "instabot-standalone.jar"
+  :aot [instabot.core]
   :ring {:handler instabot.core/app})
 
 
