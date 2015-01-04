@@ -11,7 +11,7 @@
 (defn create [spaning]
   (mc/insert-and-return db "spaningar" (merge {:_id (str (ObjectId.))} spaning)))
 
-(defn find [id]
+(defn find-one [id]
   (mc/find-one-as-map db "spaningar" { :_id id }))
 
 (defn delete [id]

@@ -5,7 +5,15 @@
             [ring.middleware.params :as ring-params]
             [instabot.insta :as insta]
             [instabot.spaning :as spaning]
-            [instabot.views :as views]))
+            [instabot.views :as views]
+            [schejulure.core :as schejulure]))
+
+(defn run-spaningar []
+  (let [spaningar (spaning/all)]
+    (future (map #(insta/fetch-and-save-a-tag (:tagname %) (:start_date %)) spaningar))))
+
+(def my-schedule
+  (schejulure/schedule {:hour (range 0 24 1)} run-spaningar))
 
 (defroutes main-routes
   (GET "/" [] (views/index))
