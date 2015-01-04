@@ -51,6 +51,7 @@ FIXME
 - ✓ Create an web-interface to view the images of each "Spaning".
 - ✓ Create an web-interface to view the data about each user.
 - ✓ Create an web-interface to manage each "Spaning". Basic CRUD.
+- # Save the images.
 
 
 Copyright © 2014 FIXME

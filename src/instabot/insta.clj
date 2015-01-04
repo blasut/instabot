@@ -44,6 +44,12 @@
   (filter (fn [image] (> (read-string (str (:created_time image) "000")) 
                          stop-date )) media))
 
+(defn fix-date [date]
+  (let [tl (tc/to-long date)]
+    (if tl
+      tl
+      (tc/to-long (t/epoch)))))
+
 ;; Good test hashtag: #nailsgram
 
 (defn get-all-tagged-media 
@@ -53,7 +59,7 @@
    If there is no more media before the date, the function returns." 
   ([tagname] (get-all-tagged-media tagname (t/epoch)))
   ([tagname stop-date]
-   (let [stop-date (tc/to-long stop-date)]
+   (let [stop-date (fix-date stop-date)]
      (loop [result []
             media (get-media-blob tagname)]
        (let [parsed-media (parse-content media)]
@@ -87,8 +93,8 @@
     (dorun (map #(mc/update db "users" {:_id (:_id %)} % {:upsert true}) users))
     (dorun (map #(mc/update db "media" {:_id (:_id %)} % {:upsert true}) media))))
 
-(defn fetch-and-save-a-tag [tag]
-  (let [media (get-all-tagged-media tag)
+(defn fetch-and-save-a-tag [tag stop-date]
+  (let [media (get-all-tagged-media tag stop-date)
         users (get-all-users-from-media media)]
     (save-users-and-media media users)))
 
