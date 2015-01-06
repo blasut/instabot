@@ -53,6 +53,7 @@ FIXME
 - ✓ Create an web-interface to manage each "Spaning". Basic CRUD.
 - ✓ Fix throttling.
 - ✓ Fix start date on spaningar.
+- # Maybe save the images every loop, instead of gathering all of them?
 - # Actually use the end date.
 - # Update spaningar to be either hashtag or user.
 - # Save the images.
