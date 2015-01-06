@@ -117,12 +117,6 @@
         users (get-all-users-from-media media)]
     (save-users-and-media media users)))
 
-(defn get-user-by-id [id]
-  (mc/find-one-as-map db "users" { :_id id }))
-
-(defn get-media-by-user-id [id]
-  (mc/find-maps db "media" {"user.id" id}))
-
 (defn get-tag-list []
   (distinct (flatten (map #(:tags %) (mq/with-collection db "media" (mq/fields [ :tags ]))))))
   

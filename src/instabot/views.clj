@@ -40,7 +40,7 @@
   (str "/media/" (:_id m)))
 
 (defn user-media-route [u]
-  (str "/user/" (:_id u) "/media"))
+  (str "/users/" (:_id u) "/media"))
 
 (defn show-tags [m]
   [:div {:class "tags"}
@@ -54,7 +54,7 @@
  (format-date (:created_time m)))
 
 (defn username-link [id username]
-  [:a {:class "user" :href (str "/user/" id)} username])
+  [:a {:class "user" :href (str "/users/" id)} username])
 
 (defn a-single-media [m]
   [:li {:class "media"}
