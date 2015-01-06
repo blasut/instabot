@@ -117,6 +117,3 @@
         users (get-all-users-from-media media)]
     (save-users-and-media media users)))
 
-(defn get-tag-list []
-  (distinct (flatten (map #(:tags %) (mq/with-collection db "media" (mq/fields [ :tags ]))))))
-  

@@ -13,7 +13,7 @@
             [throttler.core :refer [throttle-chan throttle-fn fn-throttler]]))
 
 (defroutes main-routes
-  (GET "/" [] (views/index (insta/get-tag-list)))
+  (GET "/" [] (views/index (media/get-tag-list)))
   (GET "/tag/:tagname" [tagname] (views/tag tagname (media/get-by-tag tagname)))
   (POST "/tag" [tagname] (views/tag tagname (media/get-by-tag tagname)))
   (GET "/media/:id" [id] (views/media (media/get-by-id id)))
