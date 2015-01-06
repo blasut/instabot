@@ -26,7 +26,7 @@
   (common "instabot"
           [:div {:class "index"}
            (form/form-to 
-            [:post "/tag"]
+            [:post "/tags"]
             (form/label "tagname" "Tagname:")
             (form/text-field "tagname")
             (form/submit-button "Submit"))
@@ -34,7 +34,7 @@
             [:a {:href "/spaningar"} "Spaningar"]]
            [:p 
             [:p "alla taggar:"]
-            (map (fn [t] [:a {:class "tag" :href (str "/tag/" t)} t]) tags)]]))
+            (map (fn [t] [:a {:class "tag" :href (str "/tags/" t)} t]) tags)]]))
 
 (defn media-route [m]
   (str "/media/" (:_id m)))
@@ -45,7 +45,7 @@
 (defn show-tags [m]
   [:div {:class "tags"}
    [:p "Tags:"]
-   (map (fn [t] [:a {:class "tag" :href (str "/tag/" t)} t]) (:tags m))])
+   (map (fn [t] [:a {:class "tag" :href (str "/tags/" t)} t]) (:tags m))])
 
 (defn format-date [date-string]
   (clj-time.coerce/from-long (read-string (str date-string "000"))))

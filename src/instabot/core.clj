@@ -14,8 +14,8 @@
 
 (defroutes main-routes
   (GET "/" [] (views/index (media/get-tag-list)))
-  (GET "/tag/:tagname" [tagname] (views/tag tagname (media/get-by-tag tagname)))
-  (POST "/tag" [tagname] (views/tag tagname (media/get-by-tag tagname)))
+  (GET "/tags/:tagname" [tagname] (views/tag tagname (media/get-by-tag tagname)))
+  (POST "/tags" [tagname] (views/tag tagname (media/get-by-tag tagname)))
   (GET "/media/:id" [id] (views/media (media/get-by-id id)))
   (GET "/users/:id" [id] (views/user (users/get-by-id id)))
   (GET "/users/:id/media" [id] (views/user-media (users/get-by-id id) (media/get-media-by-user id)))
