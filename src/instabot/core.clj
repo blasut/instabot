@@ -10,6 +10,8 @@
             [instabot.media :as media]
             [instabot.users :as users]
             [schejulure.core :as schejulure]
+            [clj-time.format :as f]
+            [clj-time.coerce :as c]
             [throttler.core :refer [throttle-chan throttle-fn fn-throttler]]))
 
 (defroutes main-routes
@@ -26,12 +28,17 @@
   (route/resources "/")
   (route/not-found "<h1>Page not found</h1>"))
 
+(defn proper-start-date-for-spaning [spaning]
+  (let [media-start-date (:created_date (media/get-first-by-tag (:tagname spaning)))
+        spaning-start-date (f/parse (f/formatters :date) (:start_date spaning))]
+    (if (>= (c/to-long spaning-start-date) (c/to-long media-start-date))
+      spaning-start-date
+      media-start-date)))
 
 (defn run-spaningar []
   (println (clj-time.core/now) "run spaningar")
   (let [spaningar (spaning/all)]
-    ; TODO: start date is either the time of the last image on this tag, or if no images exist its the spanings start date
-    (dorun (map #(insta/fetch-and-save-a-tag (:tagname %) (:start_date %)) spaningar))))
+    (dorun (map #(insta/fetch-and-save-a-tag (:tagname %) (proper-start-date-for-spaning %)) spaningar))))
 
 (def app
   (ring-params/wrap-params main-routes))

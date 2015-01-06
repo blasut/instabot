@@ -9,7 +9,8 @@
             [monger.operators :refer :all]
             [monger.query :as mq]
             [instabot.db :refer :all]
-            [throttler.core :refer [throttle-chan throttle-fn fn-throttler]])
+            [throttler.core :refer [throttle-chan throttle-fn fn-throttler]]
+            monger.joda-time)
   (:use
     instagram.oauth
     instagram.callbacks
@@ -49,10 +50,13 @@
 (defn parse-content [media]
   (get media :data))
 
+(defn fix-create-time-string [image]
+  (read-string (str (:created_time image) "000")))
+
 (defn within-time-range [media stop-date]
   ; Manually adding three '0' to the end of the created time string because not correct epoch format
   ; use: clojure.tools.reader.edn/read-string instead
-  (filter (fn [image] (> (read-string (str (:created_time image) "000")) 
+  (filter (fn [image] (> (fix-create-time-string image)
                          stop-date )) media))
 
 (defn fix-date [date]
@@ -104,7 +108,8 @@
   [media users]
   (println (clj-time.core/now) "save users and media")
   (let [users (map #(merge % {:_id (get % "id")}) users)
-        media (map #(merge % {:_id (get % :id)}) media)]
+        media (->> (map #(merge % {:_id (get % :id)}) media)
+                   (map #(merge % {:created_date (tc/from-long (fix-create-time-string %))})))]
     ; We have to "upsert" the users because they might already be existing.
     (println (clj-time.core/now) "finished mapping over data")
     (dorun (map #(mc/update db "users" {:_id (:_id %)} % {:upsert true}) users))
@@ -112,6 +117,7 @@
 
 (defn fetch-and-save-a-tag [tag stop-date]
   (println (clj-time.core/now) "fetch and save a tag")
+  (println (clj-time.core/now) "stopdate: " stop-date)
   (println tag stop-date)
   (let [media (get-all-tagged-media tag stop-date)
         users (get-all-users-from-media media)]

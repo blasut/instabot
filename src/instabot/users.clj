@@ -3,7 +3,8 @@
             [monger.collection :as mc]
             [monger.operators :refer :all]
             [monger.query :as mq]
-            [instabot.db :refer :all]))
+            [instabot.db :refer :all]
+            monger.joda-time))
 
 (def coll "users")
 
