@@ -16,8 +16,10 @@
   (mc/find-one-as-map db coll { :_id id }))
 
 (defn get-tag-list []
-  (->> (mq/with-collection db coll (mq/fields [ :tags ]))
+  (->> (mq/with-collection db coll 
+         (mq/fields [ :tags ]))
        (map #(:tags %))
        (flatten)
-       (distinct)))
+       (distinct)
+       (sort)))
 
