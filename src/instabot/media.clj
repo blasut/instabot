@@ -19,6 +19,5 @@
   (->> (mq/with-collection db coll (mq/fields [ :tags ]))
        (map #(:tags %))
        (flatten)
-       (distinct))
-  )
+       (distinct)))
 
