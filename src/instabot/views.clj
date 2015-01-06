@@ -47,12 +47,6 @@
    [:p "Tags:"]
    (map (fn [t] [:a {:class "tag" :href (str "/tags/" t)} t]) (:tags m))])
 
-(defn format-date [date-string]
-  (clj-time.coerce/from-long (read-string (str date-string "000"))))
-
-(defn parsed-date [m]
- (format-date (:created_time m)))
-
 (defn username-link [id username]
   [:a {:class "user" :href (str "/users/" id)} username])
 
@@ -61,7 +55,7 @@
    [:img {:src (get-in m [:images :standard_resolution :url])}]
    [:div {:class "metadata"} 
     (username-link (get-in m [:user :id]) (get-in m [:user :username]))
-    [:span {:class "created-date"} (parsed-date m)]
+    [:span {:class "created-date"} (:created_date m)]
     [:a {:class "see-more" :href (media-route m)} "Se mer"]
     [:p "Likes: " (get-in m [:likes :count])]
     [:p "Comments: " (get-in m [:comments :count])]
