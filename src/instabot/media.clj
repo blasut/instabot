@@ -14,4 +14,9 @@
   (mc/find-one-as-map db "media" { :_id id }))
 
 (defn get-tag-list []
-  (distinct (flatten (map #(:tags %) (mq/with-collection db "media" (mq/fields [ :tags ]))))))
+  (->> (mq/with-collection db "media" (mq/fields [ :tags ]))
+       (map #(:tags %))
+       (flatten)
+       (distinct))
+  )
+
