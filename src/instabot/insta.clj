@@ -117,14 +117,6 @@
         users (get-all-users-from-media media)]
     (save-users-and-media media users)))
 
-(defn get-by-tag [tag]
-  (mq/with-collection db "media"
-  (mq/find {:tags tag})
-  (mq/sort (sorted-map :created_time -1))))
-
-(defn get-media-by-id [id]
-  (mc/find-one-as-map db "media" { :_id id }))
-
 (defn get-user-by-id [id]
   (mc/find-one-as-map db "users" { :_id id }))
 

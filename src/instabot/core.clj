@@ -7,14 +7,15 @@
             [instabot.insta :as insta]
             [instabot.spaning :as spaning]
             [instabot.views :as views]
+            [instabot.media :as media]
             [schejulure.core :as schejulure]
             [throttler.core :refer [throttle-chan throttle-fn fn-throttler]]))
 
 (defroutes main-routes
   (GET "/" [] (views/index (insta/get-tag-list)))
-  (GET "/tag/:tagname" [tagname] (views/tag tagname (insta/get-by-tag tagname)))
-  (POST "/tag" [tagname] (views/tag tagname (insta/get-by-tag tagname)))
-  (GET "/media/:id" [id] (views/media (insta/get-media-by-id id)))
+  (GET "/tag/:tagname" [tagname] (views/tag tagname (media/get-by-tag tagname)))
+  (POST "/tag" [tagname] (views/tag tagname (media/get-by-tag tagname)))
+  (GET "/media/:id" [id] (views/media (media/get-by-id id)))
   (GET "/user/:id" [id] (views/user (insta/get-user-by-id id)))
   (GET "/user/:id/media" [id] (views/user-media (insta/get-user-by-id id) (insta/get-media-by-user-id id)))
   (GET "/spaningar" [] (views/spaningar (spaning/all)))
