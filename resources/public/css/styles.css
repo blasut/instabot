@@ -1,82 +1,163 @@
+html {
+    background: #fff;
+    font-size: 16px;
+    line-height: 1.4;
+    color: #222;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 18px;
+    }
+}
+
+/* Base styles */
+
 body {
-    width: 1080px;
-    margin: auto;
+    margin: 0;
+}
+
+h1 {
+    font-size: 1.5em;
 }
 
 ul {
     padding: 0;
     margin: 0;
 }
-/* INDEX */
-.index .tag {
+
+label {
+    margin: .8em 5px .8em 0;
     display: inline-block;
-    margin-right: 10px;
 }
 
-.medias {
-    width: 500px;
-    margin: auto;
-}
-.medias .media {
-    margin: 15px 0;
-    border-bottom: 1px solid #ccc;
-    max-width: 500px;
-    list-style: none;
+input {
+    margin: .8em 5px;
+    font: inherit;
+    padding: 1px 4px;
 }
 
-.medias .media .metadata {
-    margin: 10px 0;
+/* Page container */
+
+.container {
+    width: 90%;
+    max-width: 1000px;
+    margin: 1rem auto;
 }
 
-.medias .media img {
-    max-width: 500px;
+/* Page header */
+
+#header {
+    padding: 1em 0;
+    background: #444;
+    color: white;
 }
 
-.medias .media .metadata .created-date {
-    margin-left: 15px;
+#header h1 {
+    display: block;
+    margin-top: 0;
+    margin-bottom: 0;
+    text-transform: uppercase;
+    font-size: 1.5em;
+    letter-spacing: .2em;
+    font-weight: bold;
 }
 
-.medias .media .metadata .see-more {
-    margin-left: 15px;
+#header a {
+    color: inherit;
+    text-decoration: none;
 }
-/* TAGS */
-.media .tags {
-    max-width: 500px;
+
+/* Tags */
+
+.tags {
+
 }
-.media .tags .tag {
+
+.tags p {
     display: inline-block;
-    margin-right: 5px;
+    margin-right: 0.4em !important;
 }
-.media .tags .tag:last-child {
+
+.tag {
+    display: inline-block;
+    margin-right: 0.8em;
+}
+
+.tag:last-child {
     margin-right: 0;
 }
 
-/* A single media */
-.comment {
-    max-width: 490px;
-    border: 1px solid #ccc;
-    margin: 10px auto;
-    padding: 5px;
-    overflow: auto;
-}
-.comment a {
-    display:inline-block;
-    margin-right: 10px;
-}
-.comment .profile-picture {
-    float:left;
-    width: 50px;
-    margin-right: 10px;
+/* Media list */
+
+.medias {
+    max-width: 500px;
+    margin: 0 auto;
 }
 
-/* Create a spaning */
-.spaning form {
-    margin-top: 10px;
+/* Media item */
+
+.media {
+    margin: 1em 0 2em 0;
+    list-style: none;
 }
-.spaning label {
-    display:block;
+
+.media img {
+    width: 100%;
 }
+
+/* Media metadata */
+
+.metadata {
+    margin: 0.4em 0;
+}
+
+.metadata p {
+    margin: 0;
+}
+
+.metadata .user {
+    display: block;
+    float: left;
+}
+
+.metadata .created-date {
+    margin-left: 1em;
+    float: right;
+}
+
+.metadata .see-more:before {
+    content: " ";
+    display: block;
+    clear: both;
+}
+
+/* Comments */
+
+.comment {
+    width: 100%;
+    border: 1px solid #ccc;
+    margin: 0.5em auto;
+    padding: 0.5em;
+    overflow: auto;
+}
+
+.comment a {
+    display: inline-block;
+    margin-right: 1em;
+}
+
+.comment .profile-picture {
+    float: left;
+    width: 50px;
+    margin-right: 1em;
+}
+
+/* "Spaning" setup form */
+
 .spaning input {
-    display:block;
-    margin-bottom: 15px;
+    display: block;
+    margin-top: 0;
+    margin-left: 0;
 }
