@@ -1,6 +1,6 @@
 # instabot
 
-A Clojure library designed to ... well, that part is up to you.
+A Clojure app designed to ... monitor hashtags and users on instagram and fetch new media.
 
 ## Notes
 
