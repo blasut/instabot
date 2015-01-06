@@ -52,7 +52,8 @@ FIXME
 - ✓ Create an web-interface to view the data about each user.
 - ✓ Create an web-interface to manage each "Spaning". Basic CRUD.
 - ✓ Fix throttling.
-- # Fix start date on spaningar.
+- ✓ Fix start date on spaningar.
+- # Actually use the end date.
 - # Update spaningar to be either hashtag or user.
 - # Save the images.
 
