@@ -177,10 +177,8 @@
 
 (defn spaning [s]
   (common "Spaningar"
-          [:div "Hej"
-           [:p "Nu haru skapat en spaning: "]
-           [:ul
-            (single-spaning s)]
+          [:div
+           [:p "Nu haru skapat en spaning "]
            [:p 
             [:a {:href "/spaningar/new"} "Skapa ny"]]
            [:p 
