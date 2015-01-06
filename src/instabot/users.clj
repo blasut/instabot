@@ -5,9 +5,11 @@
             [monger.query :as mq]
             [instabot.db :refer :all]))
 
+(def coll "users")
+
 (defn get-by-id [id]
-  (mc/find-one-as-map db "users" { :_id id }))
+  (mc/find-one-as-map db coll { :_id id }))
 
 (defn get-media-by-user [id]
-  (mc/find-maps db "media" {"user.id" id}))
+  (mc/find-maps db coll {"user.id" id}))
 
