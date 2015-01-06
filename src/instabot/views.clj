@@ -79,7 +79,7 @@
                  (fn [c] [:div {:class "comment"} 
                           [:p 
                            (username-link (get-in c [:from :id]) (get-in c [:from :username]))
-                           [:span (format-date (:created_time c))]]
+                           [:span (:created_time c)]]
                           [:img {:class "profile-picture" :src (get-in c [:from :profile_picture])}]
                           [:p (:text c)]]) 
                  (get-in m [:comments :data]))]]))
