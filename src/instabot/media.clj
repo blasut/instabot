@@ -23,3 +23,6 @@
        (distinct)
        (sort)))
 
+(defn get-media-by-user [id]
+  (mc/find-maps db coll {"user.id" id}))
+

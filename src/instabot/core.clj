@@ -18,7 +18,7 @@
   (POST "/tag" [tagname] (views/tag tagname (media/get-by-tag tagname)))
   (GET "/media/:id" [id] (views/media (media/get-by-id id)))
   (GET "/users/:id" [id] (views/user (users/get-by-id id)))
-  (GET "/users/:id/media" [id] (views/user-media (users/get-by-id id) (users/get-media-by-user id)))
+  (GET "/users/:id/media" [id] (views/user-media (users/get-by-id id) (media/get-media-by-user id)))
   (GET "/spaningar" [] (views/spaningar (spaning/all)))
   (GET "/spaningar/new" [] (views/spaningar-new))
   (POST "/spaningar" req (views/spaning (spaning/create (:params req))))

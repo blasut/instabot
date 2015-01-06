@@ -10,6 +10,3 @@
 (defn get-by-id [id]
   (mc/find-one-as-map db coll { :_id id }))
 
-(defn get-media-by-user [id]
-  (mc/find-maps db coll {"user.id" id}))
-
