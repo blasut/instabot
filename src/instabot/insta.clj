@@ -65,22 +65,24 @@
                (t/time-zone-for-offset -1)))))
 
 (defn fix-create-time-string [image]
-  (use-correct-time-zone (read-string (str (:created_time image) "000"))))
+  (read-string (str (:created_time image) "000")))
 
 (defn within-time-range [media stop-date]
   ; Manually adding three '0' to the end of the created time string because not correct epoch format
   ; use: clojure.tools.reader.edn/read-string instead
-  (println "within time range " stop-date)
-  (println "stopdate" (tc/from-long (use-correct-time-zone stop-date)))
+  (println "stop-date" stop-date)
+  (println (tc/from-long stop-date))
   (filter (fn [image]
-            (>= (fix-create-time-string image)
+            (>= (use-correct-time-zone (fix-create-time-string image))
                          stop-date )) media))
 
 (defn fix-date [date]
-  (let [tl (use-correct-time-zone (tc/to-long date))]
-    (if tl
-      tl
-      (tc/to-long (t/epoch)))))
+  (let [default-tl (use-correct-time-zone (tc/to-long (t/epoch)))
+        tl (use-correct-time-zone (tc/to-long date))]
+    (cond
+     (= "" date) default-tl
+     :else tl)))
+    
 
 ;; Good test hashtag: #nailsgram
 
