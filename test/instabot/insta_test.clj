@@ -42,3 +42,13 @@
                               {:name "third"  :created_time (create-date-string (t/date-time 2014 01 02 10 01 01))}]]
               ; one hour ahead because of instagram API.
               (within-time-range test-media (c/to-long (t/date-time 2014 01 02 11 01 01))) => []))) 
+
+
+(future-fact "get-all-tagged-media"
+      (fact "it should stop if the media in range is less than or equal to 19")
+      (fact "it should stop if there is no more pagination links")
+      (fact "it should be callable without and stop-date")
+      (fact "it should only return the media in range")
+      (fact "it should flatten the results")
+      (fact "it should recur if there is pagination and out of range media")
+      (fact "it should get paginated pages"))
