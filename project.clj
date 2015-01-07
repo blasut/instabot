@@ -20,9 +20,9 @@
                                                     javax.jms/jms
                                                     com.sun.jmdk/jmxtools
                                                     com.sun.jmx/jmxri]]]
-  :profiles {:dev {:plugins [[cider/cider-nrepl "0.8.2"]]}
+  :profiles {:dev {:plugins [[cider/cider-nrepl "0.8.2"]
+                             [lein-ring "0.8.13"]]}
              :uberjar {:aot :all}}
-  :plugins [[lein-ring "0.8.13"]]
   :main instabot.core
   :uberjar-name "instabot-standalone.jar"
   :aot [instabot.core]
