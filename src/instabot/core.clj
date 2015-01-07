@@ -28,12 +28,18 @@
   (route/resources "/")
   (route/not-found "<h1>Page not found</h1>"))
 
+;TODO: Add tests and refactor
 (defn proper-start-date-for-spaning [spaning]
   (let [media-start-date (:created_date (media/get-first-by-tag (:tagname spaning)))
-        spaning-start-date (f/parse (f/formatters :date) (:start_date spaning))]
-    (if (>= (c/to-long spaning-start-date) (c/to-long media-start-date))
-      spaning-start-date
-      media-start-date)))
+        spaning-start-date (:start_date spaning)]
+    ; First check if media-start-date is falsey
+    ; Check if spaning-start-date is falsey
+    ; If not, compare them
+    (cond
+     (nil? media-start-date) spaning-start-date ; because "" is valid response
+     (empty? spaning-start-date) media-start-date ; return media-start-date cause it's not nil
+     (>= (c/to-long (f/parse (f/formatters :date) spaning-start-date)) (c/to-long media-start-date)) (f/parse (f/formatters :date) spaning-start-date)
+     :else media-start-date)))
 
 (defn run-spaningar []
   (println (clj-time.core/now) "run spaningar")
