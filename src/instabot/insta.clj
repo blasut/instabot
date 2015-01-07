@@ -100,8 +100,11 @@
             media (slow-get-media-blob tagname)]
        (let [parsed-media (parse-content media)]
          (println "number of parsedmedia in timerange: " (count (within-time-range parsed-media stop-date)))
+         (println "pagination " (not (pagination? media)))
+         (println "stop date " (<= (count (within-time-range parsed-media stop-date)) 19))
          (if (or (not (pagination? media))
-                 (= 0 (count (within-time-range parsed-media stop-date)))) ; not 0.
+                 (<= (count (within-time-range parsed-media stop-date)) 19))
+           ; if the range is 19 or less that means at least one is out of range and we can return.
            (flatten (conj result (within-time-range parsed-media stop-date)))
            (recur 
             (conj result (within-time-range parsed-media stop-date))
