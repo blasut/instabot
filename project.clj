@@ -20,7 +20,9 @@
                                                     javax.jms/jms
                                                     com.sun.jmdk/jmxtools
                                                     com.sun.jmx/jmxri]]]
-  :profiles {:dev {:plugins [[cider/cider-nrepl "0.8.2"]
+  :profiles {:dev {:dependencies [[midje "1.6.0" :exclusions [org.clojure/clojure]]]
+                   :plugins [[cider/cider-nrepl "0.8.2"]
+                             [lein-midje "3.1.3"]
                              [lein-ring "0.8.13"]]}
              :uberjar {:aot :all}}
   :main instabot.core
