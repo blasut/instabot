@@ -10,7 +10,6 @@
   "Remove trailing zeros from date string to match instagram api"
   [date]
   (let [date (str date)]
-    (println date)
     (subs date 0 (- (count date) 3))))
 
 (defn create-date-string [date]
@@ -31,11 +30,17 @@
       (pagination? {:pagination {:next_url "hej"}}) => true
       (pagination? {}) => false)
 
-(fact "within-time-range filters for images which have been created after the stop-date"
-      (let [test-media [{:name "first"    :created_time (create-date-string (t/date-time 2014 01 02 01 01 01))}
-                        {:name "second"   :created_time (create-date-string (t/date-time 2014 01 02 05 01 01))}
-                        {:name "included" :created_time (create-date-string (t/date-time 2014 01 02 15 01 01))}]]
-        (within-time-range test-media (c/to-long (t/date-time 2014 01 02 10 01 01))) => [{:created_time "1388674861",
-                                                                                          :name "included"}]
-
-        ))
+(fact "within-time-range filters media for images"
+      (fact "within-time-range filters for images which have been created after the stop-date"
+            (let [test-media [{:name "first"    :created_time (create-date-string (t/date-time 2014 01 02 01 01 01))}
+                              {:name "second"   :created_time (create-date-string (t/date-time 2014 01 02 05 01 01))}
+                              {:name "included" :created_time (create-date-string (t/date-time 2014 01 02 15 01 01))}]]
+              (within-time-range test-media (c/to-long (t/date-time 2014 01 02 10 01 01))) => [{:created_time "1388674861",
+                                                                                                :name "included"}]))
+      (fact "within-time-range filters for images which have been created at the stop-date"
+            (let [test-media [{:name "first"    :created_time (create-date-string (t/date-time 2014 01 02 01 01 01))}
+                              {:name "second"   :created_time (create-date-string (t/date-time 2014 01 02 05 01 01))}
+                              {:name "included" :created_time (create-date-string (t/date-time 2014 01 02 10 01 01))}]]
+              (within-time-range test-media (c/to-long (t/date-time 2014 01 02 10 01 01))) => [{:created_time "1388656861",
+                                                                                                :name "included"}]))
+      )
