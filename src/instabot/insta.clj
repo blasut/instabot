@@ -56,11 +56,9 @@
 (def df (f/formatters :date-hour-minute-second-ms))
 
 (defn use-correct-time-zone [long]
-  (tc/to-long
-   (f/unparse df
-              (t/from-time-zone
-               (tc/from-long long)
-               (t/time-zone-for-offset -1)))))
+  (->> (t/from-time-zone (tc/from-long long) (t/time-zone-for-offset -1))
+       (f/unparse df)
+       (tc/to-long)))
 
 (defn fix-create-time-string [image]
   ; Manually adding three '0' to the end of the created time string because not correct epoch format
