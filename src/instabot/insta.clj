@@ -102,7 +102,7 @@
                  (= 0 (count (within-time-range parsed-media stop-date)))) ; not 0.
            (flatten (conj result (within-time-range parsed-media stop-date)))
            (recur 
-            (conj result parsed-media)
+            (conj result (within-time-range parsed-media stop-date))
             (slow-get-by-pagination-url media))))))))
 
 
