@@ -32,12 +32,10 @@
                                          client-secret
                                          redirect-uri))
 (defn get-media-blob [tagname]
-  (log/info "get media blob" tagname)
   (walk/keywordize-keys (second (first (conj {} ; to get the kind of map we want
                  (get-tagged-medias :oauth *creds* :params {:tag_name tagname}))))))
 
 (defn get-by-pagination-url [media]
-  (log/info "get by pagination url")
   (let [url (get (get media :pagination) :next_url)]
     (walk/keywordize-keys (get (client/get url {:as :json}) :body))))
 
@@ -104,14 +102,12 @@
 
 
 (defn get-user-data [id]
-  (log/info "get user data for id: " id)
   (get-user :oauth *creds* :params {:user_id id}))
 
 (def slow-get-user-data
   (api-throttler get-user-data))
 
 (defn parse-user-data [blob]
-  (log/info "parse user data")
   (get (get blob :body) "data"))
 
 (defn get-all-users-from-media [media]
@@ -121,7 +117,6 @@
 (defn save-users-and-media
   "This function takes a blob of media and a blob of users, and saves them."
   [media users]
-  (log/info "save users and media")
   (let [users (map #(merge % {:_id (get % "id")}) users)
         media (->> (map #(merge % {:_id (get % :id)}) media)
                    (map #(merge % {:created_date (tc/from-long (fix-create-time-string %))})))]
@@ -131,7 +126,6 @@
     (dorun (map #(mc/update db "media" {:_id (:_id %)} % {:upsert true}) media))))
 
 (defn fetch-and-save-a-tag [tag stop-date]
-  (log/info "face and save tag:" tag "with stop-date: " stop-date)
   (let [media (get-all-tagged-media tag stop-date)
         users (get-all-users-from-media media)]
     (save-users-and-media media users)))

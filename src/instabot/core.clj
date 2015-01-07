@@ -9,6 +9,7 @@
             [instabot.views :as views]
             [instabot.media :as media]
             [instabot.users :as users]
+            [instabot.logging :as logging]
             [schejulure.core :as schejulure]
             [clj-time.format :as f]
             [clj-time.coerce :as c]
@@ -43,7 +44,6 @@
      :else media-start-date)))
 
 (defn run-spaningar []
-  (println (clj-time.core/now) "run spaningar")
   (log/info "run spaningar")
   (let [spaningar (spaning/all)]
     (dorun (map #(insta/fetch-and-save-a-tag (:tagname %) (proper-start-date-for-spaning %)) spaningar))))
@@ -52,7 +52,6 @@
   (ring-params/wrap-params main-routes))
 
 (defn -main [& args]
-  (println "main called")
   (log/info "main called")
   (schejulure/schedule {:minute (range 0 60 1) :second 0} run-spaningar)
   (ring/run-jetty #'app {:port 8080}))

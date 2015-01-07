@@ -19,7 +19,8 @@
                  [log4j/log4j "1.2.17" :exclusions [javax.mail/mail
                                                     javax.jms/jms
                                                     com.sun.jmdk/jmxtools
-                                                    com.sun.jmx/jmxri]]]
+                                                    com.sun.jmx/jmxri]]
+                 [dire "0.5.3"]]
   :profiles {:dev {:dependencies [[midje "1.6.0" :exclusions [org.clojure/clojure]]]
                    :plugins [[cider/cider-nrepl "0.8.2"]
                              [lein-midje "3.1.3"]
