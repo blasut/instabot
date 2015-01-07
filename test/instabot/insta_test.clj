@@ -4,6 +4,18 @@
             [clj-time.core :as t]
             [clj-time.coerce :as c]))
 
+;; Helper functions
+
+(defn remove-trailing-zeros
+  "Remove trailing zeros from date string to match instagram api"
+  [date]
+  (let [date (str date)]
+    (println date)
+    (subs date 0 (- (count date) 3))))
+
+(defn create-date-string [date]
+  (remove-trailing-zeros (c/to-long date)))
+
 
 (fact "fix date should parse string or dates and return a sane default"
       (fix-date "") => 3600000)
@@ -11,3 +23,19 @@
 (fact "use correct time zone should offset the timezone by one hour ahead"
       (use-correct-time-zone (t/date-time 2014 01 01 01 01 01)) => (c/to-long (t/date-time 2014 01 01 02 01 01))
       )
+
+(fact "fix create time string should fix the created-time string to a proper epoch format"
+      (fix-create-time-string {:created_time "123"}) => 123000)
+
+(fact "pagination? checks if there exist pagination links"
+      (pagination? {:pagination {:next_url "hej"}}) => true
+      (pagination? {}) => false)
+
+(fact "within-time-range filters for images which have been created after the stop-date"
+      (let [test-media [{:name "first"    :created_time (create-date-string (t/date-time 2014 01 02 01 01 01))}
+                        {:name "second"   :created_time (create-date-string (t/date-time 2014 01 02 05 01 01))}
+                        {:name "included" :created_time (create-date-string (t/date-time 2014 01 02 15 01 01))}]]
+        (within-time-range test-media (c/to-long (t/date-time 2014 01 02 10 01 01))) => [{:created_time "1388674861",
+                                                                                          :name "included"}]
+
+        ))
