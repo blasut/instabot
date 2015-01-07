@@ -32,13 +32,11 @@
                                          client-secret
                                          redirect-uri))
 (defn get-media-blob [tagname]
-  (println (clj-time.core/now) "get media blob")
   (log/info "get media blob" tagname)
   (walk/keywordize-keys (second (first (conj {} ; to get the kind of map we want
                  (get-tagged-medias :oauth *creds* :params {:tag_name tagname}))))))
 
 (defn get-by-pagination-url [media]
-  (println (clj-time.core/now) "get by pagination url")
   (log/info "get by pagination url")
   (let [url (get (get media :pagination) :next_url)]
     (walk/keywordize-keys (get (client/get url {:as :json}) :body))))
@@ -65,14 +63,13 @@
                (t/time-zone-for-offset -1)))))
 
 (defn fix-create-time-string [image]
+  ; Manually adding three '0' to the end of the created time string because not correct epoch format
+  ; use: clojure.tools.reader.edn/read-string instead
   (read-string (str (:created_time image) "000")))
 
 (defn within-time-range [media stop-date]
-  ; Manually adding three '0' to the end of the created time string because not correct epoch format
-  ; use: clojure.tools.reader.edn/read-string instead
-  (println "stop-date" stop-date)
-  (println (tc/from-long stop-date))
   (filter (fn [image]
+            ; TODO: right now we are getting the last media as well, because of the "="
             (>= (use-correct-time-zone (fix-create-time-string image))
                          stop-date )) media))
 
@@ -93,15 +90,15 @@
    If there is no more media before the date, the function returns." 
   ([tagname] (get-all-tagged-media tagname (t/epoch)))
   ([tagname stop-date]
-   (println "get all tagged media")
-   (println tagname)
+   (log/info "get all tagged media")
+   (log/info tagname)
    (let [stop-date (fix-date stop-date)]
      (loop [result []
             media (slow-get-media-blob tagname)]
        (let [parsed-media (parse-content media)]
-         (println "number of parsedmedia in timerange: " (count (within-time-range parsed-media stop-date)))
-         (println "pagination " (not (pagination? media)))
-         (println "stop date " (<= (count (within-time-range parsed-media stop-date)) 19))
+         (log/info "number of parsedmedia in timerange: " (count (within-time-range parsed-media stop-date)))
+         (log/info "pagination " (not (pagination? media)))
+         (log/info "stop date " (<= (count (within-time-range parsed-media stop-date)) 19))
          (if (or (not (pagination? media))
                  (<= (count (within-time-range parsed-media stop-date)) 19))
            ; if the range is 19 or less that means at least one is out of range and we can return.
@@ -120,7 +117,6 @@
   (api-throttler get-user-data))
 
 (defn parse-user-data [blob]
-  (println "parse user data")
   (log/info "parse user data")
   (get (get blob :body) "data"))
 
@@ -131,7 +127,6 @@
 (defn save-users-and-media
   "This function takes a blob of media and a blob of users, and saves them."
   [media users]
-  (println (clj-time.core/now) "save users and media")
   (log/info "save users and media")
   (let [users (map #(merge % {:_id (get % "id")}) users)
         media (->> (map #(merge % {:_id (get % :id)}) media)
@@ -142,9 +137,7 @@
     (dorun (map #(mc/update db "media" {:_id (:_id %)} % {:upsert true}) media))))
 
 (defn fetch-and-save-a-tag [tag stop-date]
-  (println (clj-time.core/now) "fetch and save a tag")
   (log/info "face and save tag:" tag "with stop-date: " stop-date)
-  (println (clj-time.core/now) "stopdate: " stop-date)
   (let [media (get-all-tagged-media tag stop-date)
         users (get-all-users-from-media media)]
     (save-users-and-media media users)))
