@@ -53,5 +53,5 @@
 
 (defn -main [& args]
   (log/info "main called")
-  (schejulure/schedule {:minute (range 0 60 1) :second 0} run-spaningar)
+  (schejulure/schedule {:minute (range 0 60 15) :second 0} run-spaningar)
   (ring/run-jetty #'app {:port 8080}))
