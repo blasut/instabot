@@ -43,7 +43,11 @@
               ; one hour ahead because of instagram API.
               (within-time-range test-media (c/to-long (t/date-time 2014 01 02 11 01 01))) => []))) 
 
-
+(future-fact "get-all-users-from-media"
+      (fact "it should map all the ids from media")
+      (fact "it should remove duplicates")
+      (fact "it should get the parsed-user-data for each"))
+             
 (future-fact "get-all-tagged-media"
       (fact "it should stop if the media in range is less than or equal to 19")
       (fact "it should stop if there is no more pagination links")
