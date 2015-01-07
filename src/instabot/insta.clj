@@ -77,9 +77,6 @@
     (cond
      (= "" date) default-tl
      :else tl)))
-    
-
-;; Good test hashtag: #nailsgram
 
 (defn get-all-tagged-media 
   "This function takes a tagname to search for at instagram and an optional date (DateTime) for when to stop.
