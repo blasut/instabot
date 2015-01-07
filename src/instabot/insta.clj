@@ -125,7 +125,7 @@
   (get (get blob :body) "data"))
 
 (defn get-all-users-from-media [media]
-  (let [ids (map #(get-in % [:user :id]) media)]
+  (let [ids (distinct (map #(get-in % [:user :id]) media))]
     (map parse-user-data (map slow-get-user-data ids))))
 
 (defn save-users-and-media
