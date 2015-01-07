@@ -65,7 +65,6 @@
 
 (defn within-time-range [media stop-date]
   (filter (fn [image]
-            ; TODO: right now we are getting the last media as well, because of the "="
             (> (use-correct-time-zone (fix-create-time-string image))
                          stop-date )) media))
 
