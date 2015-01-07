@@ -20,8 +20,7 @@
       (fix-date "") => 3600000)
 
 (fact "use correct time zone should offset the timezone by one hour ahead"
-      (use-correct-time-zone (t/date-time 2014 01 01 01 01 01)) => (c/to-long (t/date-time 2014 01 01 02 01 01))
-      )
+      (use-correct-time-zone (t/date-time 2014 01 01 01 01 01)) => (c/to-long (t/date-time 2014 01 01 02 01 01)))
 
 (fact "fix create time string should fix the created-time string to a proper epoch format"
       (fix-create-time-string {:created_time "123"}) => 123000)
@@ -42,5 +41,4 @@
                               {:name "second" :created_time (create-date-string (t/date-time 2014 01 02 05 01 01))}
                               {:name "third"  :created_time (create-date-string (t/date-time 2014 01 02 10 01 01))}]]
               ; one hour ahead because of instagram API.
-              (within-time-range test-media (c/to-long (t/date-time 2014 01 02 11 01 01))) => [])) 
-      )
+              (within-time-range test-media (c/to-long (t/date-time 2014 01 02 11 01 01))) => []))) 
