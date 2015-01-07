@@ -109,7 +109,6 @@
 
 
 (defn get-user-data [id]
-  (println "Get user data for id:" (str id))
   (log/info "get user data for id: " id)
   (get-user :oauth *creds* :params {:user_id id}))
 
