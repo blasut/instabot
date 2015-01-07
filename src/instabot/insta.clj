@@ -4,10 +4,7 @@
             [clj-time.core :as t]
             [clj-time.coerce :as tc]
             [clojure.walk :as walk]
-            [monger.core :as mg]
             [monger.collection :as mc]
-            [monger.operators :refer :all]
-            [monger.query :as mq]
             [instabot.db :refer :all]
             [throttler.core :refer [throttle-chan throttle-fn fn-throttler]]
             monger.joda-time
