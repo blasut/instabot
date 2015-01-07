@@ -11,7 +11,8 @@
             [instabot.db :refer :all]
             [throttler.core :refer [throttle-chan throttle-fn fn-throttler]]
             monger.joda-time
-            [clojure.tools.logging :as log])
+            [clojure.tools.logging :as log]
+            [clj-time.format :as f])
   (:use
     instagram.oauth
     instagram.callbacks
@@ -19,6 +20,7 @@
     instagram.api.endpoint)
   (:import
     (instagram.callbacks.protocols SyncSingleCallback)))
+
 
 (def api-throttler (fn-throttler 5000 :hour))
 
@@ -53,17 +55,29 @@
 (defn parse-content [media]
   (get media :data))
 
+(def df (f/formatters :date-hour-minute-second-ms))
+
+(defn use-correct-time-zone [long]
+  (tc/to-long
+   (f/unparse df
+              (t/from-time-zone
+               (tc/from-long long)
+               (t/time-zone-for-offset -1)))))
+
 (defn fix-create-time-string [image]
-  (read-string (str (:created_time image) "000")))
+  (use-correct-time-zone (read-string (str (:created_time image) "000"))))
 
 (defn within-time-range [media stop-date]
   ; Manually adding three '0' to the end of the created time string because not correct epoch format
   ; use: clojure.tools.reader.edn/read-string instead
-  (filter (fn [image] (> (fix-create-time-string image)
+  (println "within time range " stop-date)
+  (println "stopdate" (tc/from-long (use-correct-time-zone stop-date)))
+  (filter (fn [image]
+            (>= (fix-create-time-string image)
                          stop-date )) media))
 
 (defn fix-date [date]
-  (let [tl (tc/to-long date)]
+  (let [tl (use-correct-time-zone (tc/to-long date))]
     (if tl
       tl
       (tc/to-long (t/epoch)))))
@@ -83,6 +97,7 @@
      (loop [result []
             media (slow-get-media-blob tagname)]
        (let [parsed-media (parse-content media)]
+         (println "number of parsedmedia in timerange: " (count (within-time-range parsed-media stop-date)))
          (if (or (not (pagination? media))
                  (= 0 (count (within-time-range parsed-media stop-date)))) ; not 0.
            (flatten (conj result (within-time-range parsed-media stop-date)))
