@@ -13,7 +13,13 @@
                  [compojure "1.3.1"]
                  [hiccup "1.0.5"]
                  [schejulure "1.0.1"]
-                 [throttler "1.0.0"]]
+                 [throttler "1.0.0"]
+                 [org.clojure/tools.logging "0.3.1"]
+                 [org.slf4j/slf4j-log4j12 "1.7.9"]
+                 [log4j/log4j "1.2.17" :exclusions [javax.mail/mail
+                                                    javax.jms/jms
+                                                    com.sun.jmdk/jmxtools
+                                                    com.sun.jmx/jmxri]]]
   :profiles {:dev {:plugins [[cider/cider-nrepl "0.8.2"]]}
              :uberjar {:aot :all}}
   :plugins [[lein-ring "0.8.13"]]

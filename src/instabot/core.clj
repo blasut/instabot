@@ -12,7 +12,8 @@
             [schejulure.core :as schejulure]
             [clj-time.format :as f]
             [clj-time.coerce :as c]
-            [throttler.core :refer [throttle-chan throttle-fn fn-throttler]]))
+            [throttler.core :refer [throttle-chan throttle-fn fn-throttler]]
+            [clojure.tools.logging :as log]))
 
 (defroutes main-routes
   (GET "/" [] (views/index (media/get-tag-list)))
@@ -43,6 +44,7 @@
 
 (defn run-spaningar []
   (println (clj-time.core/now) "run spaningar")
+  (log/info "run spaningar")
   (let [spaningar (spaning/all)]
     (dorun (map #(insta/fetch-and-save-a-tag (:tagname %) (proper-start-date-for-spaning %)) spaningar))))
 
@@ -51,5 +53,6 @@
 
 (defn -main [& args]
   (println "main called")
-  (schejulure/schedule {:minute (range 0 60 15) :second 0} run-spaningar)
+  (log/info "main called")
+  (schejulure/schedule {:minute (range 0 60 1) :second 0} run-spaningar)
   (ring/run-jetty #'app {:port 8080}))
