@@ -31,3 +31,6 @@
 
 (defn get-media-by-user [id]
   (mc/find-maps db coll {"user.id" id}))
+
+(defn delete-all []
+  (mc/remove db coll))
