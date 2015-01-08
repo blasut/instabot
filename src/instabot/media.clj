@@ -8,10 +8,13 @@
 
 (def coll "media")
 
-(defn get-by-tag [tag]
-  (mq/with-collection db coll
-    (mq/find {:tags tag})
-    (mq/sort (sorted-map :created_time -1))))
+(defn get-by-tag
+  ([tag] (get-by-tag tag 1))
+  ([tag page]
+   (mq/with-collection db coll
+     (mq/find {:tags tag})
+     (mq/paginate :page page :per-page 50)
+     (mq/sort (sorted-map :created_time -1)))))
 
 (defn get-first-by-tag [tag]
   (first (mq/with-collection db coll
