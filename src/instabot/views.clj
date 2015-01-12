@@ -20,6 +20,26 @@
     [:div {:id "content" :class "container"} body]]))
 
 
+;; HELPERS
+
+
+(defn media-route [m]
+  (str "/media/" (:_id m)))
+
+(defn user-media-route [u]
+  (str "/users/" (:_id u) "/media"))
+
+(defn tags-route [t]
+  (str "/tags/" t))
+
+(defn show-tags [m]
+  [:div {:class "tags"}
+   [:p "Tags:"]
+   (map (fn [t] [:a {:class "tag" :href (tags-route t)} t]) (:tags m))])
+
+(defn username-link [id username]
+  [:a {:class "user" :href (str "/users/" id)} username])
+
 ; INDEX: Search for tag.
 ; Perhaps show available tags here?
 (defn index [tags]
@@ -36,19 +56,7 @@
             [:p "alla taggar:"]
             (map (fn [t] [:a {:class "tag" :href (str "/tags/" t)} t]) tags)]]))
 
-(defn media-route [m]
-  (str "/media/" (:_id m)))
 
-(defn user-media-route [u]
-  (str "/users/" (:_id u) "/media"))
-
-(defn show-tags [m]
-  [:div {:class "tags"}
-   [:p "Tags:"]
-   (map (fn [t] [:a {:class "tag" :href (str "/tags/" t)} t]) (:tags m))])
-
-(defn username-link [id username]
-  [:a {:class "user" :href (str "/users/" id)} username])
 
 (defn a-single-media [m]
   [:li {:class "media"}
@@ -61,20 +69,35 @@
     [:p "Comments: " (get-in m [:comments :count])]
     [:span {:class "tags"} (show-tags m)]]])
 
+(defn show-pagination [main-url media]
+  (let [pages (/ 50 (count media))]
+    [:ul (count media)
+     [:li
+      [:a {:href (str main-url "/pages/")}]
+      ]
+     ])
+  )
+
+(defn show-media [main-url media]
+  [:div
+   (show-pagination main-url media)
+   [:ul {:class "medias"} (map
+                             (fn [m] (a-single-media m))
+                             media)]
+   (show-pagination main-url media)])
+
 (defn tag [tagname media]
   (common (str "Tag: " (str tagname))
           [:div
            [:h1 tagname]
            [:p "Total number of media: " (count media)]
-           [:ul {:class "medias"} (map
-                 (fn [m] (a-single-media m))
-                 media)]]))
+           (show-media (tags-route tagname) media)]))
 
 (defn media [m]
   (common "media"
           [:div
            [:h1 "Media"]
-           [:ul {:class "medias"} (a-single-media m)]
+           (show-media media)
            [:ul (map 
                  (fn [c] [:div {:class "comment"} 
                           [:p 
@@ -101,13 +124,12 @@
 ; GET /user/:id/media
 ; Show all media related to the user.
 
+
 (defn user-media [user media]
   (common "Users media"
           [:div "User: " (:username user)
            [:p "Total number of media: " (count media)]
-           [:ul {:class "medias"} (map
-                 (fn [m] (a-single-media m))
-                 media)]]))
+           (show-media media)]))
 
 ;
 ; TODO:
