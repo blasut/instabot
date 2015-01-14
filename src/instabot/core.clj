@@ -44,9 +44,9 @@
      (>= (c/to-long (f/parse (f/formatters :date) spaning-start-date)) (c/to-long media-start-date)) (f/parse (f/formatters :date) spaning-start-date)
      :else media-start-date)))
 
-(defn run-spaningar []
-  (log/info "run spaningar")
-  (let [spaningar (spaning/all)]
+(defn run-spaningar-for-hashtags []
+  (log/info "run hashtag spaningar")
+  (let [spaningar (spaning/hashtags)]
     (dorun (map #(insta/fetch-and-save-a-tag (:tagname %) (proper-start-date-for-spaning %)) spaningar))))
 
 (def app
@@ -54,5 +54,5 @@
 
 (defn -main [& args]
   (log/info "main called")
-  (schejulure/schedule {:minute (range 0 60 15) :second 0} run-spaningar)
+  (schejulure/schedule {:minute (range 0 60 15) :second 0} run-spaningar-for-hashtags)
   (ring/run-jetty #'app {:port 8080}))
