@@ -11,6 +11,9 @@
 (defn find-one [id]
   (mc/find-one-as-map db "spaningar" { :_id id }))
 
+(defn hashtags []
+  (mc/find-maps db "spaningar" {:type "Hashtag"}))
+
 (defn create [spaning]
   (mc/insert-and-return db "spaningar" (merge {:_id (str (ObjectId.))} spaning)))
 
