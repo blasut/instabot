@@ -78,26 +78,24 @@
      ])
   )
 
-(defn show-media [main-url media]
+(defn show-media [media]
   [:div
-   (show-pagination main-url media)
    [:ul {:class "medias"} (map
                              (fn [m] (a-single-media m))
-                             media)]
-   (show-pagination main-url media)])
+                             media)]])
 
 (defn tag [tagname media]
   (common (str "Tag: " (str tagname))
           [:div
            [:h1 tagname]
            [:p "Total number of media: " (count media)]
-           (show-media (tags-route tagname) media)]))
+           (show-media media)]))
 
 (defn media [m]
   (common "media"
           [:div
            [:h1 "Media"]
-           (show-media media)
+           [:ul {:class "medias"} (a-single-media m)]
            [:ul (map 
                  (fn [c] [:div {:class "comment"} 
                           [:p 
