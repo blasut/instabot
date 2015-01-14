@@ -24,6 +24,12 @@
   (GET "/media/:id" [id] (views/media (media/get-by-id id)))
   (GET "/users/:id" [id] (views/user (users/get-by-id id)))
   (GET "/users/:id/media" [id] (views/user-media (users/get-by-id id) (media/get-media-by-user id)))
+
+  (GET "/location/:id/media" [id]
+       (let [location (spaning/find-one id)]
+         (views/location (media/get-by-location location))))
+
+  ; SPANINGAR
   (GET "/spaningar" [] (views/spaningar (spaning/all)))
   (GET "/spaningar/new" [] (views/spaningar-new))
   (POST "/spaningar" req (views/spaning (spaning/create (:params req))))

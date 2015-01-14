@@ -40,3 +40,9 @@
 
 (defn delete-by-tag [tagname]
   (mc/remove db coll {:tags tagname}))
+
+(defn get-by-location
+  [location]
+  (mc/find-maps db coll { :search_lat (read-string (:lat location))
+                          :search_lng (read-string (:lng location))}))
+

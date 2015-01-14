@@ -129,6 +129,14 @@
            [:p "Total number of media: " (count media)]
            (show-media media)]))
 
+(defn location [media]
+  (common "Location media"
+   [:div
+    [:p "Lat: " (:search_lat (first media))]
+    [:p "Lng: " (:search_lng (first media))]
+    (show-media media)
+    ]))
+
 ;
 ; TODO:
 ; SPANINGAR: 
@@ -159,7 +167,12 @@
   [:li 
    [:p (:tagname s)]
    [:p "Start date: " (:start_date s)]
-   [:p "End date: " (:end_date s)]
+   [:p "End date: -"]
+   [:p "Latitud: " (:lat s)]
+   [:p "Longitud: " (:lng s)]
+   [:p "Distance: " (:dst s)]
+   [:p "Type: " (:type s)]
+   [:p [:a {:href (str "/location/" (:_id s) "/media")} "Location media"]]
    [:p [:a {:href (str "/spaningar/" (:_id s) "/destroy")} "Ta bort"]]])
 
 (defn spaningar [spaningar]
@@ -184,7 +197,19 @@
             (form/text-field "start_date")
 
             (form/label "end_date" "End date:")
-            (form/text-field "end_date")
+            (form/text-field {:disabled true} "end_date")
+
+            (form/label "lat" "Latitud:")
+            (form/text-field "lat")
+
+            (form/label "lng" "Longitud:")
+            (form/text-field "lng")
+
+            (form/label "dst" "Distance (Max 5000m):")
+            (form/text-field "dst")
+
+            (form/label "type" "Type:")
+            (form/drop-down "type" ["Hashtag" "Location"])
 
             (form/submit-button "Submit"))
            ]))

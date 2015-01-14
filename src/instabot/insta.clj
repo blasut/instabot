@@ -126,3 +126,76 @@
         users (get-all-users-from-media media)]
     (save-users-and-media media users)))
 
+
+;; Fetching images by location
+
+(defn instafy-long-timestamps [ts]
+  (subs (str (tc/to-long ts)) 0 10))
+
+(defn ilt [ts]
+  (instafy-long-timestamps ts))
+
+(defn get-search-media [params]
+  (walk/keywordize-keys
+   (get-in
+    (search-medias :oauth *creds* :params params)
+    [:body "data"])))
+
+(defn get-images-by-search
+  ([lat lng min_ts dst] (get-search-media {:lat lat
+                                           :lng lng
+                                           :min_timestamp min_ts
+                                           :distance dst}))
+  ([lat lng min_ts max_ts dst] (get-search-media {:lat lat
+                                                  :lng lng
+                                                  :min_timestamp min_ts
+                                                  :max_timestamp max_ts
+                                                  :distance dst})))
+
+(defn get-last-images-created-time [media]
+  (get (last media) :created_time))
+
+; Clean up date-time strings
+(defn get-all-media-by-location [{:keys [lat lng min_ts dst]}]
+  ; Get the first 20, and use the last image's created_time for the next max timestamp
+  ; Unless we have 19 or less, then stop
+  (loop [result []
+         times 0
+         media (get-images-by-search lat lng min_ts dst)]
+      (println "\n\n")
+      (println "count media: " (count media))
+      (println "Lat:" lat "long:" lng)
+      (println "Min:" min_ts "max:" nil)
+      (println "min date: " (tc/from-long (read-string (str min_ts "000"))))
+      (println (get-last-images-created-time media))
+      (println "first media created date" (tc/from-long (fix-create-time-string (first media))))
+      (println "last media created date" (tc/from-long (fix-create-time-string (last media))))
+      (println "times:" times)
+      (println (>= (read-string min_ts) (read-string (get-last-images-created-time media))))
+      (println (read-string min_ts) (read-string (get-last-images-created-time media)))
+      (println (= (tc/from-long (fix-create-time-string (first media))) (tc/from-long (fix-create-time-string (last media)))))
+
+      (if (or (= (tc/from-long (fix-create-time-string (first media))) (tc/from-long (fix-create-time-string (last media)))) ; if the first media and last media created string is the same, we can safely stop. Because there are no more images coming.
+              (= times 50) ; DEBUG
+              ;(>= (read-string min_ts) (read-string (get-last-images-created-time media))) FIX THIS
+              )
+        (flatten (conj result media))
+        (recur
+         (conj result media)
+         (inc times)
+         (get-images-by-search lat lng min_ts (get-last-images-created-time media) dst)))))
+
+;(def lat 59.372705)
+;(def lng 18.000232)
+
+;(fetch-and-save-a-location {:lat 59.372705 :lng 18.000232 :min_ts (t/date-time 2015 01 10 01 01) :dst 1000})
+
+(defn fetch-and-save-a-location [{:keys [lat lng min_ts dst]}]
+  (let [raw-media (get-all-media-by-location {:lat lat
+                                           :lng lng
+                                           :min_ts (ilt min_ts)
+                                           :dst dst})
+        media (map #(merge % {:search_lat lat :search_lng lng}) raw-media)
+        users (get-all-users-from-media media)]
+    (println "media count:" (count media))
+    (save-users-and-media media users)))
