@@ -13,7 +13,7 @@
   ([tag page]
    (mq/with-collection db coll
      (mq/find {:tags tag})
-     (mq/paginate :page page :per-page 50)
+     (mq/paginate :page page :per-page 200)
      (mq/sort (sorted-map :created_time -1)))))
 
 (defn get-first-by-tag [tag]
