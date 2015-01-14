@@ -37,3 +37,6 @@
 
 (defn delete-all []
   (mc/remove db coll))
+
+(defn delete-by-tag [tagname]
+  (mc/remove db coll {:tags tagname}))
