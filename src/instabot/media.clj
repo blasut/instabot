@@ -43,6 +43,13 @@
 
 (defn get-by-location
   [location]
-  (mc/find-maps db coll { :search_lat (read-string (:lat location))
-                          :search_lng (read-string (:lng location))}))
+  (println location)
+  (println (:lat location))
+  (let [media (mc/find-maps db coll { :search_lat (read-string (:lat location))
+                                     :search_lng (read-string (:lng location))})]
+    (println (empty? media))
+    (if (empty? media)
+      (mc/find-maps db coll { :search_lat (:lat location)
+                             :search_lng (:lng location)})
+      media)))
 
