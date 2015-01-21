@@ -35,6 +35,9 @@
 (defn get-media-by-user [id]
   (mc/find-maps db coll {"user.id" id}))
 
+(defn get-all []
+  (mc/find-maps db coll))
+
 (defn delete-all []
   (mc/remove db coll))
 
@@ -43,13 +46,10 @@
 
 (defn get-by-location
   [location]
-  (println location)
-  (println (:lat location))
-  (let [media (mc/find-maps db coll { :search_lat (read-string (:lat location))
-                                     :search_lng (read-string (:lng location))})]
-    (println (empty? media))
-    (if (empty? media)
-      (mc/find-maps db coll { :search_lat (:lat location)
-                             :search_lng (:lng location)})
-      media)))
+  (mq/with-collection db coll
+    (mq/find { :search_lat (:lat location)
+              :search_lng (:lng location)})
+    (mq/sort (sorted-map :created_time -1))))
 
+(defn get-first-by-location [location]
+  (first (get-by-location location)))

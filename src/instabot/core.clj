@@ -38,8 +38,8 @@
   (route/not-found "<h1>Page not found</h1>"))
 
 ;TODO: Add tests and refactor
-(defn proper-start-date-for-spaning [spaning]
-  (let [media-start-date (:created_date (media/get-first-by-tag (:tagname spaning)))
+(defn proper-start-date-for-spaning [spaning media]
+  (let [media-start-date (:created_date media)
         spaning-start-date (:start_date spaning)]
     ; First check if media-start-date is falsey
     ; Check if spaning-start-date is falsey
@@ -50,10 +50,20 @@
      (>= (c/to-long (f/parse (f/formatters :date) spaning-start-date)) (c/to-long media-start-date)) (f/parse (f/formatters :date) spaning-start-date)
      :else media-start-date)))
 
+(defn run-spaningar-for-locations []
+  (log/info "run locations spaningar")
+  (let [spaningar (spaning/locations)]
+    (dorun (map #(insta/fetch-and-save-a-location {:lat (:lat %)
+                                                   :lng (:lng %)
+                                                   :min_ts (proper-start-date-for-spaning % (media/get-first-by-location %))
+                                                   :dst (:dst %)}) spaningar))))
+
 (defn run-spaningar-for-hashtags []
   (log/info "run hashtag spaningar")
   (let [spaningar (spaning/hashtags)]
-    (dorun (map #(insta/fetch-and-save-a-tag (:tagname %) (proper-start-date-for-spaning %)) spaningar))))
+    (dorun (map #(insta/fetch-and-save-a-tag
+                  (:tagname %)
+                  (proper-start-date-for-spaning % (media/get-first-by-tag (:tagname %)))) spaningar))))
 
 (def app
   (ring-params/wrap-params main-routes))
@@ -61,4 +71,5 @@
 (defn -main [& args]
   (log/info "main called")
   (schejulure/schedule {:minute (range 0 60 15) :second 0} run-spaningar-for-hashtags)
+  (schejulure/schedule {:minute (range 0 60 19) :second 0} run-spaningar-for-locations)
   (ring/run-jetty #'app {:port 8080}))

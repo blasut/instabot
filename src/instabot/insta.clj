@@ -191,6 +191,7 @@
 ;(fetch-and-save-a-location {:lat 59.372705 :lng 18.000232 :min_ts (t/date-time 2015 01 10 01 01) :dst 1000})
 
 (defn fetch-and-save-a-location [{:keys [lat lng min_ts dst]}]
+  (println "min ts" min_ts)
   (let [raw-media (slow-get-all-media-by-location {:lat lat
                                            :lng lng
                                            :min_ts (ilt min_ts)
@@ -199,3 +200,4 @@
         users (get-all-users-from-media media)]
     (println "media count:" (count media))
     (save-users-and-media media users)))
+
