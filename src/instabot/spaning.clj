@@ -1,12 +1,16 @@
 (ns instabot.spaning
   (:require [monger.core :as mg]
             [monger.collection :as mc]
+            [monger.operators :refer :all]
+            [monger.query :as mq]
             [instabot.db :refer :all])
   (:import [org.bson.types ObjectId]
            [com.mongodb DB WriteConcern]))
 
 (defn all []
-  (mc/find-maps db "spaningar"))
+  (mq/with-collection db "spaningar"
+    (mq/find {})
+    (mq/sort (sorted-map :start_time -1))))
 
 (defn find-one [id]
   (mc/find-one-as-map db "spaningar" { :_id id }))
