@@ -165,6 +165,7 @@
 
 (defn single-spaning [s]
   [:li 
+   [:p "Type: " (:type s)]
    [:p "Tag: "
     [:a {:href (str "/tags/" (:tagname s))} (:tagname s)]]
    [:p "Start date: " (:start_date s)]
@@ -172,7 +173,6 @@
    [:p "Latitud: " (:lat s)]
    [:p "Longitud: " (:lng s)]
    [:p "Distance: " (:dst s)]
-   [:p "Type: " (:type s)]
    (if (= "Location" (:type s))
      [:p [:a {:href (str "/location/" (:_id s) "/media")} "Location media"]]
      [:p [:a {:href (str "/tags/" (:tagname s))} "Hashtag media"]])
