@@ -161,7 +161,6 @@
   ; Get the first 20, and use the last image's created_time for the next max timestamp
   ; Unless we have 19 or less, then stop
   (loop [result []
-         times 0
          media (get-images-by-search lat lng min_ts dst)]
       (println "\n\n")
       (println "count media: " (count media))
@@ -171,19 +170,16 @@
       (println (get-last-images-created-time media))
       (println "first media created date" (tc/from-long (fix-create-time-string (first media))))
       (println "last media created date" (tc/from-long (fix-create-time-string (last media))))
-      (println "times:" times)
       (println (>= (read-string min_ts) (read-string (get-last-images-created-time media))))
       (println (read-string min_ts) (read-string (get-last-images-created-time media)))
       (println (= (tc/from-long (fix-create-time-string (first media))) (tc/from-long (fix-create-time-string (last media)))))
 
       (if (or (= (tc/from-long (fix-create-time-string (first media))) (tc/from-long (fix-create-time-string (last media)))) ; if the first media and last media created string is the same, we can safely stop. Because there are no more images coming.
-              (= times 50) ; DEBUG
               ;(>= (read-string min_ts) (read-string (get-last-images-created-time media))) FIX THIS
               )
         (flatten (conj result media))
         (recur
          (conj result media)
-         (inc times)
          (get-images-by-search lat lng min_ts (get-last-images-created-time media) dst)))))
 
 ;(def lat 59.372705)
