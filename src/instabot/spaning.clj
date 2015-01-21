@@ -7,22 +7,24 @@
   (:import [org.bson.types ObjectId]
            [com.mongodb DB WriteConcern]))
 
+(def coll "spaningar")
+
 (defn all []
-  (mq/with-collection db "spaningar"
+  (mq/with-collection db coll
     (mq/find {})
     (mq/sort (sorted-map :start_time -1))))
 
 (defn find-one [id]
-  (mc/find-one-as-map db "spaningar" { :_id id }))
+  (mc/find-one-as-map db coll { :_id id }))
 
 (defn hashtags []
-  (mc/find-maps db "spaningar" {:type "Hashtag"}))
+  (mc/find-maps db coll {:type "Hashtag"}))
 
 (defn locations []
-  (mc/find-maps db "spaningar" {:type "Location"}))
+  (mc/find-maps db coll {:type "Location"}))
 
 (defn create [spaning]
-  (mc/insert-and-return db "spaningar" (merge {:_id (str (ObjectId.))} spaning)))
+  (mc/insert-and-return db coll (merge {:_id (str (ObjectId.))} spaning)))
 
 (defn delete [id]
-  (mc/remove-by-id db "spaningar" id))
+  (mc/remove-by-id db coll id))
