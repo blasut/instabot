@@ -165,7 +165,7 @@
 
 (defn single-spaning [s]
   [:li 
-   [:p
+   [:p "Tag: "
     [:a {:href (str "/tags/" (:tagname s))} (:tagname s)]]
    [:p "Start date: " (:start_date s)]
    [:p "End date: -"]
@@ -174,7 +174,8 @@
    [:p "Distance: " (:dst s)]
    [:p "Type: " (:type s)]
    (if (= "Location" (:type s))
-     [:p [:a {:href (str "/location/" (:_id s) "/media")} "Location media"]])
+     [:p [:a {:href (str "/location/" (:_id s) "/media")} "Location media"]]
+     [:p [:a {:href (str "/tags/" (:tagname s))} "Hashtag media"]])
    [:p [:a {:href (str "/spaningar/" (:_id s) "/destroy")} "Ta bort"]]])
 
 (defn spaningar [spaningar]
@@ -183,7 +184,7 @@
            [:p 
             [:a {:href "/spaningar/new"} "Skapa ny"]]
            [:p "Nuvarande spaningar: "]
-           [:ul
+           [:ul {:class "spaningar"}
             (map #(single-spaning %) spaningar)]]))
 
 (defn spaningar-new []
