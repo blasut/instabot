@@ -165,14 +165,16 @@
 
 (defn single-spaning [s]
   [:li 
-   [:p (:tagname s)]
+   [:p
+    [:a {:href (str "/tags/" (:tagname s))} (:tagname s)]]
    [:p "Start date: " (:start_date s)]
    [:p "End date: -"]
    [:p "Latitud: " (:lat s)]
    [:p "Longitud: " (:lng s)]
    [:p "Distance: " (:dst s)]
    [:p "Type: " (:type s)]
-   [:p [:a {:href (str "/location/" (:_id s) "/media")} "Location media"]]
+   (if (= "Location" (:type s))
+     [:p [:a {:href (str "/location/" (:_id s) "/media")} "Location media"]])
    [:p [:a {:href (str "/spaningar/" (:_id s) "/destroy")} "Ta bort"]]])
 
 (defn spaningar [spaningar]
