@@ -119,7 +119,8 @@
     ; We have to "upsert" the users because they might already be existing.
     (println (clj-time.core/now) "finished mapping over data")
     (dorun (map #(mc/update db "users" {:_id (:_id %)} % {:upsert true}) users))
-    (dorun (map #(mc/update db "media" {:_id (:_id %)} % {:upsert true}) media))))
+    (dorun (map #(mc/update db "media" {:_id (:_id %)} % {:upsert true}) media))
+    (println (clj-time.core/now) "finished saving data")))
 
 (defn fetch-and-save-a-tag [tag stop-date]
   (let [media (get-all-tagged-media tag stop-date)
