@@ -2,6 +2,16 @@
 
 A Clojure app designed to ... monitor hashtags and users on instagram and fetch new media.
 
+## Deploy
+
+1. Make an uberjar
+2. Start with java -jar and provide the following in the ENV:
+client-id : The instagram client id
+client-secret : The instagram client secret
+redirect-uri : The instagram redirect uri
+3. Thats it. But I recommend to use behind nginx proxy.
+
+
 ## Notes
 
 Problemet med get-tagged-medias är att den returnar x antal media + en pagination. Det kan vara sjukt många poster som har gjorts på hashtagen. Detta löses genom att räkna ut antal sidor och dela upp så det blir mindre än 5.000 requests per timme.
