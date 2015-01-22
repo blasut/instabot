@@ -174,9 +174,8 @@
       (println (read-string min_ts) (read-string (get-last-images-created-time media)))
       (println (= (tc/from-long (fix-create-time-string (first media))) (tc/from-long (fix-create-time-string (last media)))))
 
-      (if (or (= (tc/from-long (fix-create-time-string (first media))) (tc/from-long (fix-create-time-string (last media)))) ; if the first media and last media created string is the same, we can safely stop. Because there are no more images coming.
+      (if (= (tc/from-long (fix-create-time-string (first media))) (tc/from-long (fix-create-time-string (last media)))) ; if the first media and last media created string is the same, we can safely stop. Because there are no more images coming.
               ;(>= (read-string min_ts) (read-string (get-last-images-created-time media))) FIX THIS
-              )
         (flatten (conj result media))
         (recur
          (conj result media)
