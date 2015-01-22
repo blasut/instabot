@@ -10,4 +10,11 @@ $( document ).ready(function() {
 	itemSelector : ".medias .media",
         // selector for all items you'll retrieve
     });
+
+
+    $('.submit').on("click", (function (ev) {
+    	ev.preventDefault();
+    	var new_loc = "/tags/" + $("#tagname").val() + "/pages/1";
+    	window.location = new_loc;
+    }))
 });

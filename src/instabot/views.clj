@@ -53,7 +53,7 @@
             [:post "/tags"]
             (form/label "tagname" "Tagname:")
             (form/text-field "tagname")
-            (form/submit-button "Submit"))
+            (form/submit-button {:class "submit"} "Submit"))
            [:p
             [:a {:href "/spaningar"} "Spaningar"]]
            [:p 
