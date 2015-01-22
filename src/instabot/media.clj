@@ -55,7 +55,10 @@
     (mq/paginate :page page :per-page 250)))
 
 (defn get-first-by-location [location]
-  (first (get-by-location location)))
+  (first (mq/with-collection db coll
+           (mq/find { :search_lat (:lat location)
+                     :search_lng (:lng location)})
+           (mq/sort (sorted-map :created_time -1)))))
 
 (defn get-count-by-location
   [location]
