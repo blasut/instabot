@@ -45,6 +45,7 @@
 (defn index [tags]
   (common "instabot"
           [:div {:class "index"}
+           [:p "Search doesnt work right now."]
            (form/form-to 
             [:post "/tags"]
             (form/label "tagname" "Tagname:")
