@@ -13,29 +13,11 @@
             [instabot.jobs :as jobs]
             [schejulure.core :as schejulure]
             [throttler.core :refer [throttle-chan throttle-fn fn-throttler]]
-            [clojure.tools.logging :as log]))
-
-(defroutes main-routes
-  (GET "/" [] (views/index (media/get-tag-list)))
-  (GET "/tags/:tagname" [tagname] (views/tag tagname (media/get-by-tag tagname)))
-  (GET "/media/:id" [id] (views/media (media/get-by-id id)))
-  (GET "/users/:id" [id] (views/user (users/get-by-id id)))
-  (GET "/users/:id/media" [id] (views/user-media (users/get-by-id id) (media/get-media-by-user id)))
-
-  (GET "/location/:id/media" [id]
-       (let [location (spaning/find-one id)]
-         (views/location (media/get-by-location location))))
-
-  ; SPANINGAR
-  (GET "/spaningar" [] (views/spaningar (spaning/all)))
-  (GET "/spaningar/new" [] (views/spaningar-new))
-  (POST "/spaningar" req (views/spaning (spaning/create (:params req))))
-  (GET "/spaningar/:id/destroy" [id] (views/spaning-deleted (spaning/delete id)))
-  (route/resources "/")
-  (route/not-found "<h1>Page not found</h1>"))
+            [clojure.tools.logging :as log]
+            [instabot.routes :as routes]))
 
 (def app
-  (ring-params/wrap-params main-routes))
+  (ring-params/wrap-params routes/main-routes))
 
 (defn -main [& args]
   (log/info "main called")
