@@ -7,7 +7,7 @@ $( document ).ready(function() {
         // selector for the paged navigation (it will be hidden)
 	nextSelector : "ul.navigation a:last",    
         // selector for the NEXT link (to page 2)
-	itemSelector : ".medias .media"          
+	itemSelector : ".medias .media",
         // selector for all items you'll retrieve
     });
 });

@@ -127,21 +127,27 @@
            [:p "Total number of media: " (count media)]
            (show-media media)]))
 
+(defn show-pagination [next-page url]
+  (let [prev-page (- next-page 2)]
+    [:ul {:class "navigation"}
+     [:li
+      (if (not= prev-page 0)
+        [:a {:href (str url "/pages/" prev-page)} "Prev page"])
+      [:a {:href   (str url "/pages/" next-page)} "Next page"]
+      ]]))
+  
+(defn location-media-route [l]
+  (str "/location/" (:_id l) "/media"))
+
 (defn location [location media-count media next-page]
   (common "Location media"
    [:div
     [:p "Lat: " (:lat location)]
     [:p "Lng: " (:lng location)]
-    [:ul media-count
-     [:ul {:class "navigation"}
-      [:li
-       (if (not= next-page 2)
-         [:a {:href (str "/location/" (:_id location) "/media" "/pages/" (- next-page 2))} "Prev page"])
-       [:a {:href (str "/location/" (:_id location) "/media" "/pages/" next-page)} "Next page"]
-       ]]
-     ]
-    (show-media media)
-    ]))
+    [:p "Total number of media: " media-count]
+    [:ul
+     (show-media media)]
+    (show-pagination next-page (location-media-route location))]))
 
 ;
 ; TODO:

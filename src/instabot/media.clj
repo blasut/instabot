@@ -50,7 +50,7 @@
     (mq/find { :search_lat (:lat location)
               :search_lng (:lng location)})
     (mq/sort (sorted-map :created_time -1))
-    (mq/paginate :page page :per-page 10)))
+    (mq/paginate :page page :per-page 250)))
 
 (defn get-first-by-location [location]
   (first (get-by-location location)))
