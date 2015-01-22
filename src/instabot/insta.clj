@@ -117,10 +117,10 @@
         media (->> (map #(merge % {:_id (get % :id)}) media)
                    (map #(merge % {:created_date (tc/from-long (fix-create-time-string %))})))]
     ; We have to "upsert" the users because they might already be existing.
-    (println (clj-time.core/now) "finished mapping over data")
+    (log/info "finished mapping over data")
     (dorun (map #(mc/update db "users" {:_id (:_id %)} % {:upsert true}) users))
     (dorun (map #(mc/update db "media" {:_id (:_id %)} % {:upsert true}) media))
-    (println (clj-time.core/now) "finished saving data")))
+    (log/info "finished saving data")))
 
 (defn fetch-and-save-a-tag [tag stop-date]
   (let [media (get-all-tagged-media tag stop-date)
@@ -162,20 +162,17 @@
   ; Unless we have 19 or less, then stop
   (loop [result []
          media (get-images-by-search lat lng min_ts dst)]
-      (println "\n\n")
-      (println "count media: " (count media))
-      (println "Lat:" lat "long:" lng)
-      (println "Min:" min_ts "max:" nil)
-      (println "min date: " (tc/from-long (read-string (str min_ts "000"))))
-      (println (get-last-images-created-time media))
-      (println "first media created date" (tc/from-long (fix-create-time-string (first media))))
-      (println "last media created date" (tc/from-long (fix-create-time-string (last media))))
-      (println (>= (read-string min_ts) (read-string (get-last-images-created-time media))))
-      (println (read-string min_ts) (read-string (get-last-images-created-time media)))
-      (println (= (tc/from-long (fix-create-time-string (first media))) (tc/from-long (fix-create-time-string (last media)))))
+      (log/info "count media: " (count media))
+      (log/info "Lat:" lat "long:" lng)
+      (log/info "Min:" min_ts "max:" nil)
+      (log/info "min date: " (tc/from-long (read-string (str min_ts "000"))))
+      (log/info "first media created date" (tc/from-long (fix-create-time-string (first media))))
+      (log/info "last media created date" (tc/from-long (fix-create-time-string (last media))))
 
-      (if (= (tc/from-long (fix-create-time-string (first media))) (tc/from-long (fix-create-time-string (last media)))) ; if the first media and last media created string is the same, we can safely stop. Because there are no more images coming.
-              ;(>= (read-string min_ts) (read-string (get-last-images-created-time media))) FIX THIS
+      (if (= (tc/from-long (fix-create-time-string (first media)))
+             (tc/from-long (fix-create-time-string (last media))))
+             ; Because we use the min_ts we dont have to check for anything else than that the last and first
+             ; media is the same. Because we wont get anymore media per search.
         (flatten (conj result media))
         (recur
          (conj result media)
@@ -190,13 +187,12 @@
 ;(fetch-and-save-a-location {:lat 59.372705 :lng 18.000232 :min_ts (t/date-time 2015 01 10 01 01) :dst 1000})
 
 (defn fetch-and-save-a-location [{:keys [lat lng min_ts dst]}]
-  (println "min ts" min_ts)
   (let [raw-media (slow-get-all-media-by-location {:lat lat
                                            :lng lng
                                            :min_ts (ilt min_ts)
                                            :dst dst})
         media (map #(merge % {:search_lat lat :search_lng lng}) raw-media)
         users (get-all-users-from-media media)]
-    (println "media count:" (count media))
+    (log/info "media count:" (count media))
     (save-users-and-media media users)))
 
