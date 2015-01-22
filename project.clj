@@ -24,7 +24,8 @@
   :profiles {:dev {:dependencies [[midje "1.6.0" :exclusions [org.clojure/clojure]]]
                    :plugins [[cider/cider-nrepl "0.8.2"]
                              [lein-midje "3.1.3"]
-                             [lein-ring "0.8.13"]]}
+                             [lein-ring "0.8.13"]
+                             [jonase/eastwood "0.2.1"]]}
              :uberjar {:aot :all}}
   :main instabot.core
   :uberjar-name "instabot-standalone.jar"
