@@ -6,7 +6,8 @@
             [instabot.views :as views]
             [instabot.media :as media]
             [instabot.users :as users]
-            [instabot.logging :as logging]))
+            [instabot.logging :as logging]
+            [ring.util.response :as resp]))
 
 (defn next-page [page]
   (+ page 1))
@@ -60,12 +61,16 @@
   (let [id (find-param request :id)]
     (views/spaning-deleted (spaning/delete id))))
 
+(defn tags-post [request]
+  (resp/redirect (str "/tags/" (get-in request [:form-params "tagname"] ) "/pages/1")))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;                  The Routes                      ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defroutes main-routes
   (GET "/"                                  [] root)
 
+  (POST "/tags"                             [] tags-post)
   (GET "/tags/:tagname/pages/:page"         [] tags-show)
 
   (GET "/media/:id"                         [] media-show)
