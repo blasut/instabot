@@ -55,7 +55,7 @@
   (views/spaningar-new))
 
 (defn spaningar-create [request]
- (views/spaning (spaning/create (:params request))))
+  (views/spaning (spaning/create (:params request))))
 
 (defn spaningar-destroy [request]
   (let [id (find-param request :id)]

@@ -52,7 +52,7 @@ $.fn.alterClass = function ( removals, additions ) {
     });
 
 
-    $('.submit').on("click", (function (ev) {
+    $('.index .submit').on("click", (function (ev) {
     	ev.preventDefault();
     	var new_loc = "/tags/" + $("#tagname").val() + "/pages/1";
     	window.location = new_loc;
