@@ -33,7 +33,7 @@
   (str "/users/" (:_id u) "/media"))
 
 (defn tags-route [t]
-  (str "/tags/" t))
+  (str "/tags/" t "/pages/1"))
 
 (defn show-tags [m]
   [:div {:class "tags"}
@@ -58,7 +58,7 @@
             [:a {:href "/spaningar"} "Spaningar"]]
            [:p 
             [:p "alla taggar:"]
-            (map (fn [t] [:a {:class "tag" :href (str "/tags/" t)} t]) tags)]]))
+            (map (fn [t] [:a {:class "tag" :href (tags-route t)} t]) tags)]]))
 
 
 
@@ -73,21 +73,30 @@
     [:p "Comments: " (get-in m [:comments :count])]
     [:span {:class "tags"} (show-tags m)]]])
 
-(defn show-pagination [main-url media]
-  )
-
 (defn show-media [media]
   [:div
    [:ul {:class "medias"} (map
                              (fn [m] (a-single-media m))
                              media)]])
 
-(defn tag [tagname media]
-  (common (str "Tag: " (str tagname))
+(defn show-pagination [next-page url media-count]
+  (let [prev-page (- next-page 2)]
+    [:ul {:class "navigation"}
+     [:li
+      (if (not= prev-page 0)
+        [:a {:href (str url "/pages/" prev-page)} "Prev page"])
+      (if (not= media-count 0)
+        [:a {:href   (str url "/pages/" next-page)} "Next page"])
+      ]]))
+
+(defn tag [tagname media-count media next-page]
+  (common (str "Tag: " tagname)
           [:div
            [:h1 tagname]
-           [:p "Total number of media: " (count media)]
-           (show-media media)]))
+           [:p "Total number of media: " media-count]
+           [:p "Number of media this page: " (count media)]
+           (show-media media)
+           (show-pagination next-page (str "/tags/" tagname) (count media))]))
 
 (defn media [m]
   (common "media"
@@ -127,15 +136,6 @@
            [:p "Total number of media: " (count media)]
            (show-media media)]))
 
-(defn show-pagination [next-page url]
-  (let [prev-page (- next-page 2)]
-    [:ul {:class "navigation"}
-     [:li
-      (if (not= prev-page 0)
-        [:a {:href (str url "/pages/" prev-page)} "Prev page"])
-      [:a {:href   (str url "/pages/" next-page)} "Next page"]
-      ]]))
-  
 (defn location-media-route [l]
   (str "/location/" (:_id l) "/media"))
 
@@ -147,7 +147,7 @@
     [:p "Total number of media: " media-count]
     [:ul
      (show-media media)]
-    (show-pagination next-page (location-media-route location))]))
+    (show-pagination next-page (location-media-route location) (count media))]))
 
 ;
 ; TODO:
@@ -179,7 +179,7 @@
   [:li 
    [:p "Type: " (:type s)]
    [:p "Tag: "
-    [:a {:href (str "/tags/" (:tagname s))} (:tagname s)]]
+    [:a {:href (tags-route (:tagname s))} (:tagname s)]]
    [:p "Start date: " (:start_date s)]
    [:p "End date: -"]
    [:p "Latitud: " (:lat s)]
@@ -187,7 +187,7 @@
    [:p "Distance: " (:dst s)]
    (if (= "Location" (:type s))
      [:p [:a {:href (str "/location/" (:_id s) "/media/pages/1")} "Location media"]]
-     [:p [:a {:href (str "/tags/" (:tagname s))} "Hashtag media"]])
+     [:p [:a {:href (tags-route (:tagname s))} "Hashtag media"]])
    [:p [:a {:href (str "/spaningar/" (:_id s) "/destroy")} "Ta bort"]]])
 
 (defn spaningar [spaningar]

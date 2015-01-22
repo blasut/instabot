@@ -9,12 +9,14 @@
 (def coll "media")
 
 (defn get-by-tag
-  ([tag] (get-by-tag tag 1))
-  ([tag page]
-   (mq/with-collection db coll
-     (mq/find {:tags tag})
-     (mq/paginate :page page :per-page 200)
-     (mq/sort (sorted-map :created_time -1)))))
+  [tag page]
+  (mq/with-collection db coll
+    (mq/find {:tags tag})
+    (mq/paginate :page page :per-page 200)
+    (mq/sort (sorted-map :created_time -1))))
+
+(defn get-count-by-tag [tag]
+  (mc/count db coll { :tags tag }))
 
 (defn get-first-by-tag [tag]
   (first (mq/with-collection db coll

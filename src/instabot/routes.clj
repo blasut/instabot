@@ -8,6 +8,9 @@
             [instabot.users :as users]
             [instabot.logging :as logging]))
 
+(defn next-page [page]
+  (+ page 1))
+
 (defn find-param [request key]
   (get-in request [:params key]))
 
@@ -15,8 +18,12 @@
   (views/index (media/get-tag-list)))
 
 (defn tags-show [request]
-  (let [tagname (find-param request :tagname)]
-    (views/tag tagname (media/get-by-tag tagname))))
+  (let [tagname (find-param request :tagname)
+        page (Integer. (find-param request :page))]
+    (views/tag tagname
+               (media/get-count-by-tag tagname)
+               (media/get-by-tag tagname page)
+               (next-page page))))
 
 (defn media-show [request]
   (let [id (find-param request :id)]
@@ -29,10 +36,6 @@
 (defn users-media [request]
   (let [id (find-param request :id)]
     (views/user-media (users/get-by-id id) (media/get-media-by-user id))))
-
-(defn next-page [page]
-  (println "page" page)
-  (+ page 1))
 
 (defn location-media [request]
   (let [id (find-param request :id)
@@ -58,18 +61,20 @@
     (views/spaning-deleted (spaning/delete id))))
 
 (defroutes main-routes
-  (GET "/"                      [] root)
-  (GET "/tags/:tagname"         [] tags-show)
-  (GET "/media/:id"             [] media-show)
-  (GET "/users/:id"             [] users-show)
-  (GET "/users/:id/media"       [] users-media)
+  (GET "/"                                  [] root)
+
+  (GET "/tags/:tagname/pages/:page"         [] tags-show)
+
+  (GET "/media/:id"                         [] media-show)
+  (GET "/users/:id"                         [] users-show)
+  (GET "/users/:id/media"                   [] users-media)
 
   (GET "/location/:id/media/pages/:page"    [] location-media)
 
-  (GET "/spaningar"             [] spaningar-index)
-  (GET "/spaningar/new"         [] spaningar-new)
-  (POST "/spaningar"            [] spaningar-create)
-  (GET "/spaningar/:id/destroy" [] spaningar-destroy)
+  (GET "/spaningar"                         [] spaningar-index)
+  (GET "/spaningar/new"                     [] spaningar-new)
+  (POST "/spaningar"                        [] spaningar-create)
+  (GET "/spaningar/:id/destroy"             [] spaningar-destroy)
 
   (route/resources "/")
   (route/not-found "<h1>Page not found</h1>"))
