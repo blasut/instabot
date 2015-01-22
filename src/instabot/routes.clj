@@ -35,7 +35,6 @@
         location (spaning/find-one id)]
     (views/location (media/get-by-location location))))
 
-
 (defn spaningar-index [request]
   (views/spaningar (spaning/all)))
 
