@@ -60,6 +60,9 @@
   (let [id (find-param request :id)]
     (views/spaning-deleted (spaning/delete id))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;                  The Routes                      ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defroutes main-routes
   (GET "/"                                  [] root)
 
