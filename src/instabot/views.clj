@@ -209,13 +209,7 @@
 
             (form/label {:class "hashtag"} "tagname" "Hashtag (without the #):")
             (form/text-field {:class "hashtag"} "tagname")
-
-            (form/label {:class "hashtag location"} "start_date" "Start date [YYYY-MM-DD]:")
-            (form/text-field {:class "hashtag location"} "start_date")
-
-            (form/label "end_date" "End date:")
-            (form/text-field {:disabled true} "end_date")
-
+            
             (form/label {:class "location"} "lat" "Latitud:")
             (form/text-field {:class "location"} "lat")
 
@@ -224,6 +218,13 @@
 
             (form/label {:class "location"} "dst" "Distance (Max 5000m):")
             (form/text-field {:class "location"} "dst")
+
+            (form/label {:class "hashtag location"} "start_date" "Start date [YYYY-MM-DD]:")
+            (form/text-field {:class "hashtag location"} "start_date")
+
+            (form/label "end_date" "End date:")
+            (form/text-field {:disabled true} "end_date")
+
 
             (form/submit-button {:class "submit"} "Submit"))
            ]))
