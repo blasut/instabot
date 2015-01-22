@@ -13,6 +13,9 @@
     [:meta {:name "viewport" :content
             "width=device-width, initial-scale=1, maximum-scale=1"}]
     (page/include-css "/css/styles.css")
+    (page/include-js "/js/jquery-2.1.3.min.js")
+    (page/include-js "/js/jquery.infinitescroll.min.js")
+    (page/include-js "/js/scripts.js")
     [:title title]]
    [:body
     [:div {:id "header"}
@@ -71,12 +74,6 @@
     [:span {:class "tags"} (show-tags m)]]])
 
 (defn show-pagination [main-url media]
-  (let [pages (/ 50 (count media))]
-    [:ul (count media)
-     [:li
-      [:a {:href (str main-url "/pages/")}]
-      ]
-     ])
   )
 
 (defn show-media [media]
@@ -130,11 +127,19 @@
            [:p "Total number of media: " (count media)]
            (show-media media)]))
 
-(defn location [media]
+(defn location [location media-count media next-page]
   (common "Location media"
    [:div
-    [:p "Lat: " (:search_lat (first media))]
-    [:p "Lng: " (:search_lng (first media))]
+    [:p "Lat: " (:lat location)]
+    [:p "Lng: " (:lng location)]
+    [:ul media-count
+     [:ul {:class "navigation"}
+      [:li
+       (if (not= next-page 2)
+         [:a {:href (str "/location/" (:_id location) "/media" "/pages/" (- next-page 2))} "Prev page"])
+       [:a {:href (str "/location/" (:_id location) "/media" "/pages/" next-page)} "Next page"]
+       ]]
+     ]
     (show-media media)
     ]))
 
@@ -175,7 +180,7 @@
    [:p "Longitud: " (:lng s)]
    [:p "Distance: " (:dst s)]
    (if (= "Location" (:type s))
-     [:p [:a {:href (str "/location/" (:_id s) "/media")} "Location media"]]
+     [:p [:a {:href (str "/location/" (:_id s) "/media/pages/1")} "Location media"]]
      [:p [:a {:href (str "/tags/" (:tagname s))} "Hashtag media"]])
    [:p [:a {:href (str "/spaningar/" (:_id s) "/destroy")} "Ta bort"]]])
 

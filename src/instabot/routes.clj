@@ -30,10 +30,19 @@
   (let [id (find-param request :id)]
     (views/user-media (users/get-by-id id) (media/get-media-by-user id))))
 
+(defn next-page [page]
+  (println "page" page)
+  (+ page 1))
+
 (defn location-media [request]
   (let [id (find-param request :id)
-        location (spaning/find-one id)]
-    (views/location (media/get-by-location location))))
+        location (spaning/find-one id)
+        page (Integer. (find-param request :page))]
+    (views/location
+     location
+     (media/get-count-by-location location)
+     (media/get-by-location location page)
+     (next-page page))))
 
 (defn spaningar-index [request]
   (views/spaningar (spaning/all)))
@@ -54,7 +63,8 @@
   (GET "/media/:id"             [] media-show)
   (GET "/users/:id"             [] users-show)
   (GET "/users/:id/media"       [] users-media)
-  (GET "/location/:id/media"    [] location-media)
+
+  (GET "/location/:id/media/pages/:page"    [] location-media)
 
   (GET "/spaningar"             [] spaningar-index)
   (GET "/spaningar/new"         [] spaningar-new)

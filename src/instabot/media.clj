@@ -45,11 +45,17 @@
   (mc/remove db coll {:tags tagname}))
 
 (defn get-by-location
-  [location]
+  [location page]
   (mq/with-collection db coll
     (mq/find { :search_lat (:lat location)
               :search_lng (:lng location)})
-    (mq/sort (sorted-map :created_time -1))))
+    (mq/sort (sorted-map :created_time -1))
+    (mq/paginate :page page :per-page 10)))
 
 (defn get-first-by-location [location]
   (first (get-by-location location)))
+
+(defn get-count-by-location
+  [location]
+  (mc/count db coll { :search_lat (:lat location)
+                     :search_lng (:lng location)}))
