@@ -156,10 +156,24 @@ input {
 
 /* "Spaning" setup form */
 
-.spaning input {
+.spaning input, .spaning select {
     display: block;
     margin-top: 0;
     margin-left: 0;
+}
+
+.is-hashtag .location {
+    display:none;
+}
+.is-hashtag .hashtag {
+    display:block;
+}
+
+.is-location .hashtag {
+    display:none;
+}
+.is-location .location {
+    display:block;
 }
 
 /* Spaningar */

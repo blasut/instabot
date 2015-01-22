@@ -48,16 +48,15 @@
 (defn index [tags]
   (common "instabot"
           [:div {:class "index"}
-           [:p "Search doesnt work right now."]
+           [:p
+            [:a {:href "/spaningar"} "Spaningar"]]
            (form/form-to 
             [:post "/tags"]
             (form/label "tagname" "Tagname:")
             (form/text-field "tagname")
-            (form/submit-button {:class "submit"} "Submit"))
-           [:p
-            [:a {:href "/spaningar"} "Spaningar"]]
+            (form/submit-button {:class "submit"} "Sök"))
            [:p 
-            [:p "alla taggar:"]
+            [:p "alla taggar som finns i systemet:"]
             (map (fn [t] [:a {:class "tag" :href (tags-route t)} t]) tags)]]))
 
 
@@ -205,28 +204,28 @@
            (form/form-to 
             [:post "/spaningar"]
 
-            (form/label "tagname" "Tagname (without the #):")
-            (form/text-field "tagname")
+            (form/label {:class "type-of-spaning"}  "type" "Type:")
+            (form/drop-down {:class "type-of-spaning"} "type" ["Hashtag" "Location"])
 
-            (form/label "start_date" "Start date:")
-            (form/text-field "start_date")
+            (form/label {:class "hashtag"} "tagname" "Hashtag (without the #):")
+            (form/text-field {:class "hashtag"} "tagname")
+
+            (form/label {:class "hashtag location"} "start_date" "Start date [YYYY-MM-DD]:")
+            (form/text-field {:class "hashtag location"} "start_date")
 
             (form/label "end_date" "End date:")
             (form/text-field {:disabled true} "end_date")
 
-            (form/label "lat" "Latitud:")
-            (form/text-field "lat")
+            (form/label {:class "location"} "lat" "Latitud:")
+            (form/text-field {:class "location"} "lat")
 
-            (form/label "lng" "Longitud:")
-            (form/text-field "lng")
+            (form/label {:class "location"} "lng" "Longitud:")
+            (form/text-field {:class "location"} "lng")
 
-            (form/label "dst" "Distance (Max 5000m):")
-            (form/text-field "dst")
+            (form/label {:class "location"} "dst" "Distance (Max 5000m):")
+            (form/text-field {:class "location"} "dst")
 
-            (form/label "type" "Type:")
-            (form/drop-down "type" ["Hashtag" "Location"])
-
-            (form/submit-button "Submit"))
+            (form/submit-button {:class "submit"} "Submit"))
            ]))
 
 (defn spaning [s]
