@@ -22,5 +22,5 @@
 (defn -main [& args]
   (log/info "main called")
   (schejulure/schedule {:minute (range 0 60 15) :second 0} jobs/run-spaningar-for-hashtags)
-  (schejulure/schedule {:minute (range 0 60 19) :second 0} jobs/run-spaningar-for-locations)
+  (schejulure/schedule {:minute (range 0 60 18) :second 0} jobs/run-spaningar-for-locations)
   (ring/run-jetty #'app {:port 8080}))
