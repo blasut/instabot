@@ -76,7 +76,9 @@
   "This function takes a tagname to search for at instagram and an optional date (DateTime) for when to stop.
    The stop-date defaults to start of epoch time.
    If no DateTime is provided the function returns when there are no more media.
-   If there is no more media before the date, the function returns." 
+   If there is no more media before the date, the function returns.
+   Because Instagram returns crappy time strings, we get false positives when checking if an image
+   is within the time range."
   ([tagname] (get-all-tagged-media tagname (t/epoch)))
   ([tagname stop-date]
    (log/info "get all tagged media")
@@ -85,15 +87,16 @@
      (loop [result []
             media (slow-get-media-blob tagname)]
        (let [parsed-media (parse-content media)]
+         (log/info "number of media for this fetch" (count parsed-media))
          (log/info "number of parsedmedia in timerange: " (count (within-time-range parsed-media stop-date)))
          (log/info "pagination " (not (pagination? media)))
-         (log/info "stop date " (<= (count (within-time-range parsed-media stop-date)) 19))
+         (log/info "last medias time: " (use-correct-time-zone (fix-create-time-string (last parsed-media))))
+
          (if (or (not (pagination? media))
-                 (<= (count (within-time-range parsed-media stop-date)) 19))
-           ; if the range is 19 or less that means at least one is out of range and we can return.
+                 (<= (count (within-time-range parsed-media stop-date)) 1))
            (flatten (conj result (within-time-range parsed-media stop-date)))
            (recur 
-            (conj result (within-time-range parsed-media stop-date))
+            (conj result parsed-media)
             (slow-get-by-pagination-url media))))))))
 
 
