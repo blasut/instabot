@@ -117,7 +117,6 @@
         media (->> (map #(merge % {:_id (get % :id)}) media)
                    (map #(merge % {:created_date (tc/from-long (fix-create-time-string %))})))]
     ; We have to "upsert" the users because they might already be existing.
-    (log/info "finished mapping over data")
     (dorun (map #(mc/update db "users" {:_id (:_id %)} % {:upsert true}) users))
     (dorun (map #(mc/update db "media" {:_id (:_id %)} % {:upsert true}) media))
     (log/info "finished saving data")))
@@ -169,10 +168,9 @@
       (log/info "first media created date" (tc/from-long (fix-create-time-string (first media))))
       (log/info "last media created date" (tc/from-long (fix-create-time-string (last media))))
 
-      (if (= (tc/from-long (fix-create-time-string (first media)))
-             (tc/from-long (fix-create-time-string (last media))))
-             ; Because we use the min_ts we dont have to check for anything else than that the last and first
-             ; media is the same. Because we wont get anymore media per search.
+      (if (or (>= (fix-create-time-string (first media))
+                  (fix-create-time-string (last media)))
+              (= (:id (first media)) (:id last media)))
         (flatten (conj result media))
         (recur
          (conj result media)
