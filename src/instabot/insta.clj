@@ -90,7 +90,7 @@
          (log/info "number of media for this fetch" (count parsed-media))
          (log/info "number of parsedmedia in timerange: " (count (within-time-range parsed-media stop-date)))
          (log/info "pagination " (not (pagination? media)))
-         (log/info "last medias time: " (use-correct-time-zone (fix-create-time-string (last parsed-media))))
+         (log/info "last medias time: " (tc/from-long (use-correct-time-zone (fix-create-time-string (last parsed-media)))))
 
          (if (or (not (pagination? media))
                  (<= (count (within-time-range parsed-media stop-date)) 1))
