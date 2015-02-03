@@ -67,6 +67,14 @@ FIXME
 - # Actually use the end date.
 - # Update spaningar to be either hashtag or user.
 - # Save the images.
+- # Döp om spaningar till: searches
+- # Google maps integration
+- # Filtrering på taggar, och sånt
+- # Spara ner allt som zip(?)
+- # Lägg till date-picker
+- # Video-stöd
+
+
 
 
 Copyright © 2014 FIXME
