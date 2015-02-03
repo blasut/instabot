@@ -20,7 +20,8 @@
                                                     javax.jms/jms
                                                     com.sun.jmdk/jmxtools
                                                     com.sun.jmx/jmxri]]
-                 [dire "0.5.3"]]
+                 [dire "0.5.3"]
+                 [twitter-api "0.7.8"]]
   :profiles {:dev {:dependencies [[midje "1.6.0" :exclusions [org.clojure/clojure]]]
                    :plugins [[cider/cider-nrepl "0.8.2"]
                              [lein-midje "3.1.3"]
