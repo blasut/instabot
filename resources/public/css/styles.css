@@ -66,7 +66,6 @@ input {
     font-size: 2.0em;
     letter-spacing: .2em;
     font-weight: bold;
-    font-family: Helvetica Bold;
 }
 
 #header a {
@@ -211,15 +210,15 @@ input {
 .new-spaning {
     background: #3f7eca;
     color: white;
-    font-family: Helvetica Bold;
     font-size: 36px;
+    font-weight: bold;
     padding: 20px;
     margin-top: 10px;
     display: inline-block;
 }
 
 .spaningar-container h3 {
-    font-family: Helvetica Bold;
+    font-weight: bold;
     font-size: 30px;
     margin: 5px 0;
     color: #262626;
