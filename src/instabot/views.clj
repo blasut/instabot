@@ -187,9 +187,9 @@
    [:p "Longitud: " (:lng s)]
    [:p "Distance: " (:dst s)]
    (if (= "Location" (:type s))
-     [:p [:a {:class "see-media" :href (str "/location/" (:_id s) "/media/pages/1")} "See data"]]
-     [:p [:a {:class "see-media" :href (tags-route (:tagname s))} "See data"]])
-   [:p [:a {:class "remove" :href (str "/spaningar/" (:_id s) "/destroy")} "Remove get"]]])
+     [:button [:a {:class "see-media" :href (str "/location/" (:_id s) "/media/pages/1")} "See data"]]
+     [:button [:a {:class "see-media" :href (tags-route (:tagname s))} "See data"]])
+   [:button [:a {:class "remove" :href (str "/spaningar/" (:_id s) "/destroy")} "Remove get"]]])
 
 (defn spaningar [spaningar]
   (common "Gets"

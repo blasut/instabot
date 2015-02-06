@@ -212,16 +212,14 @@ input {
     font-weight: bold;
     font-size: 30px;
     margin: 5px 0;
-    padding-bottom: 15px;
     color: #262626;
-    border-bottom: 1px solid #ccc;
 }
 
 .spaningar li {
     display: block;
-    margin-top: 10px;
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
+    padding: 10px 0 10px 0;
+    border-top: 1px solid #ccc;
+    margin: 10px 0;
 }
 
 .spaningar li p {
@@ -242,12 +240,24 @@ input {
     color: #6B6B6B;
 }
 
+
+.spaningar li button {
+    outline: 0;
+    border: none;
+    background: none;
+    margin: 0;
+    padding: 0 5px 0 0;
+    font-size: 14px;
+}
+
 .spaningar li .see-media {
     font-weight: bold;
     background: #3f7eca;
+    padding: 10px;
 }
 
 .spaningar li .remove {
     font-weight: bold;
     background: #fa1c41;
+    padding: 10px;
 }
