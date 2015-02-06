@@ -54,7 +54,7 @@ input {
 
 #header {
     padding: 1em 0;
-    background: #444;
+    background: #3f7eca;
     color: white;
 }
 
@@ -63,9 +63,10 @@ input {
     margin-top: 0;
     margin-bottom: 0;
     text-transform: uppercase;
-    font-size: 1.5em;
+    font-size: 2.0em;
     letter-spacing: .2em;
     font-weight: bold;
+    font-family: Helvetica Bold;
 }
 
 #header a {
@@ -76,7 +77,6 @@ input {
 /* Tags */
 
 .tags {
-
 }
 
 .tags p {
@@ -87,6 +87,8 @@ input {
 .tag {
     display: inline-block;
     margin-right: 0.8em;
+    color: #696969;
+    border-bottom: 1px dotted #696969;
 }
 
 .tag:last-child {
@@ -96,14 +98,17 @@ input {
 /* Media list */
 
 .medias {
-    max-width: 500px;
-    margin: 0 auto;
 }
 
 /* Media item */
 
+.outer-media {
+    border-top: 1px solid #ccc;
+}
+
 .media {
-    margin: 1em 0 2em 0;
+    margin: 2em 0 2em 0;
+    max-width: 500px;
     list-style: none;
 }
 
@@ -122,19 +127,41 @@ input {
 }
 
 .metadata .user {
-    display: block;
-    float: left;
+    display: inline-block;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #696969;
+    border-bottom: 1px solid #ccc;
+    font-size: 16px;
 }
 
 .metadata .created-date {
-    margin-left: 1em;
-    float: right;
 }
 
-.metadata .see-more:before {
-    content: " ";
-    display: block;
-    clear: both;
+.metadata .see-more {
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #696969;
+    border-bottom: 1px solid #ccc;
+    font-size: 16px;
+}
+
+.metadata .likes,
+.metadata .comments,
+.metadata .tags {
+    color: #696969;
+    font-size: 14px;
+}
+
+.metadata .likes,
+.metadata .comments,
+.metadata .tags,
+.metadata .created-date,
+.metadate .see-more {
+    margin-top: 5px;
+}
+.metadata .user {
+    margin-bottom: 5px;
 }
 
 /* Comments */

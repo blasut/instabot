@@ -19,7 +19,7 @@
     [:title title]]
    [:body
     [:div {:id "header"}
-     [:h1 {:class "container"} [:a {:href "/"} "Instabot"]]]
+     [:h1 {:class "container"} [:a {:href "/"} "Act Get"]]]
     [:div {:id "content" :class "container"} body]]))
 
 
@@ -62,15 +62,16 @@
 
 
 (defn a-single-media [m]
-  [:li {:class "media"}
-   [:img {:src (get-in m [:images :standard_resolution :url])}]
-   [:div {:class "metadata"} 
-    (username-link (get-in m [:user :id]) (get-in m [:user :username]))
-    [:span {:class "created-date"} (:created_date m)]
-    [:a {:class "see-more" :href (media-route m)} "Se mer"]
-    [:p "Likes: " (get-in m [:likes :count])]
-    [:p "Comments: " (get-in m [:comments :count])]
-    [:span {:class "tags"} (show-tags m)]]])
+  [:div {:class "outer-media"}
+   [:li {:class "media"}
+    [:img {:src (get-in m [:images :standard_resolution :url])}]
+    [:div {:class "metadata"} 
+     (username-link (get-in m [:user :id]) (get-in m [:user :username]))
+     [:p [:a {:class "see-more" :href (media-route m)} "Se mer >"]]
+     [:p {:class "created-date"} (:created_date m)]
+     [:p {:class "likes"} "Likes: " (get-in m [:likes :count])]
+     [:p {:class "comments"} "Comments: " (get-in m [:comments :count])]
+     [:span {:class "tags"} (show-tags m)]]]])
 
 (defn show-media [media]
   [:div
@@ -141,8 +142,7 @@
 (defn location [location media-count media next-page]
   (common "Location media"
    [:div
-    [:p "Lat: " (:lat location)]
-    [:p "Lng: " (:lng location)]
+    [:p "Titel:" (:title location)]
     [:p "Total number of media: " media-count]
     [:ul
      (show-media media)]
