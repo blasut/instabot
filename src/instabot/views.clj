@@ -176,6 +176,7 @@
 
 (defn single-spaning [s]
   [:li 
+   [:p {:class "title"} "Title: " (:title s)]
    [:p "Type: " (:type s)]
    [:p "Tag: "
     [:a {:href (tags-route (:tagname s))} (:tagname s)]]
@@ -185,16 +186,16 @@
    [:p "Longitud: " (:lng s)]
    [:p "Distance: " (:dst s)]
    (if (= "Location" (:type s))
-     [:p [:a {:href (str "/location/" (:_id s) "/media/pages/1")} "Location media"]]
-     [:p [:a {:href (tags-route (:tagname s))} "Hashtag media"]])
-   [:p [:a {:href (str "/spaningar/" (:_id s) "/destroy")} "Ta bort"]]])
+     [:p [:a {:class "see-media" :href (str "/location/" (:_id s) "/media/pages/1")} "See data"]]
+     [:p [:a {:class "see-media" :href (tags-route (:tagname s))} "See data"]])
+   [:p [:a {:class "remove" :href (str "/spaningar/" (:_id s) "/destroy")} "Remove get"]]])
 
 (defn spaningar [spaningar]
   (common "Spaningar"
-          [:div "Hej"
+          [:div {:class "spaningar-container"}
            [:p 
-            [:a {:href "/spaningar/new"} "Skapa ny"]]
-           [:p "Nuvarande spaningar: "]
+            [:a {:href "/spaningar/new" :class "new-spaning"} "Create a new get >"]]
+           [:h3 "Current gets: "]
            [:ul {:class "spaningar"}
             (map #(single-spaning %) spaningar)]]))
 
@@ -203,6 +204,9 @@
           [:div {:class "spaning new"} "Create new spaning."
            (form/form-to 
             [:post "/spaningar"]
+
+            (form/label {:class "hashtag location"}  "type" "Title:")
+            (form/text-field {:class "hashtag location"} "title")
 
             (form/label {:class "type-of-spaning"}  "type" "Type:")
             (form/drop-down {:class "type-of-spaning"} "type" ["Hashtag" "Location"])

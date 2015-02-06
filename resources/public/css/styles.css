@@ -6,6 +6,10 @@ html {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+a {
+    text-decoration: none;
+}
+
 @media (min-width: 768px) {
     html {
         font-size: 18px;
@@ -177,10 +181,52 @@ input {
 }
 
 /* Spaningar */
-.spaningar li {
+.new-spaning {
+    background: #3f7eca;
+    color: white;
+    font-family: Helvetica Bold;
+    font-size: 36px;
+    padding: 20px;
+    margin-top: 10px;
     display: inline-block;
+}
+
+.spaningar-container h3 {
+    font-family: Helvetica Bold;
+    font-size: 30px;
+    margin: 5px 0;
+    color: #262626;
+    border-bottom: 1px solid #ccc;
+}
+
+.spaningar li {
+    font-family: Helvetica Bold;
+    display: block;
     margin-right: 15px;
     margin-top: 15px;
     padding: 10px;
-    border: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+
+.spaningar li a {
+    display: inline-block;
+    padding: 5px 10px;
+    color: white;
+}
+
+.spaningar li .title {
+    color: #353634;
+}
+
+.spaningar li p {
+    font-family: Helvetica Regular;
+    color: #6B6B6B;
+}
+
+.spaningar li .see-media {
+    background: #3f7eca;
+}
+
+.spaningar li .remove {
+    background: #fa1c41;
 }
