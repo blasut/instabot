@@ -2,7 +2,10 @@
   (:require [clojure.data.json :as json]
             [http.async.client :as ac]
             [environ.core :refer [env]]
-            [clj-http.client :as client])
+            [clj-http.client :as client]
+            [clj-time.core :as t]
+            [clj-time.format :as f]
+            [clj-time.coerce :as tc])
   (:use [twitter.oauth]
         [twitter.callbacks]
         [twitter.callbacks.handlers]
@@ -30,12 +33,21 @@
                             ;:since_id (get-in tweets [:body :search_metadata :since_id])
                             :max_id max-id})))
 
+;(defn within-time-range [tweets stop-date]
+;  (filter (fn [tweet]
+;            (> (:created_at tweet)
+;               stop-date )) tweets))
+
+(def twitter-date-parser (f/formatter "E MMM dd HH:mm:ss Z Y"))
+
+(defn add-date [tweets]
+  (map #(merge % {:created_date (f/parse twitter-date-parser (:created_at %))}) tweets))
+
 (defn get-all-tweets-since [params start-date]
   (loop [result []
          tweets (search-tweets :oauth-creds my-creds :params params)
          times 0]
     (println "getting the tweets")
-    (Thread/sleep (* 30 1000))
     (println "start date" start-date)
     (println "first:" (:id (first (parsed-tweets tweets))))
     (println "last: " (:id (last (parsed-tweets tweets))))
@@ -48,7 +60,7 @@
     (println (map :id (parsed-tweets tweets)))
     (println "\n")
     (if (= times 5)
-      (flatten result)
+      (add-date (flatten result))
       (recur
        (conj result (parsed-tweets tweets))
        (get-new-tweets params tweets)
