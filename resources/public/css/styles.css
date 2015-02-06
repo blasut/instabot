@@ -216,6 +216,10 @@ input {
     display: inline-block;
 }
 
+.new-spaning:hover {
+    opacity: 0.7;
+}
+
 .spaningar-container h3 {
     font-weight: bold;
     font-size: 30px;
