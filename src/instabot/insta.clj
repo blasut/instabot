@@ -63,7 +63,7 @@
 (defn within-time-range [media stop-date]
   (filter (fn [image]
             (> (use-correct-time-zone (fix-create-time-string image))
-                         stop-date )) media))
+               stop-date )) media))
 
 (defn fix-date [date]
   (let [default-tl (use-correct-time-zone (tc/to-long (t/epoch)))
