@@ -46,7 +46,7 @@
 ; INDEX: Search for tag.
 ; Perhaps show available tags here?
 (defn index [tags]
-  (common "instabot"
+  (common "Act Get"
           [:div {:class "index"}
            [:p
             [:a {:href "/spaningar"} "Spaningar"]]
@@ -191,7 +191,7 @@
    [:p [:a {:class "remove" :href (str "/spaningar/" (:_id s) "/destroy")} "Remove get"]]])
 
 (defn spaningar [spaningar]
-  (common "Spaningar"
+  (common "Gets"
           [:div {:class "spaningar-container"}
            [:p 
             [:a {:href "/spaningar/new" :class "new-spaning"} "Create a new get >"]]
@@ -200,7 +200,7 @@
             (map #(single-spaning %) spaningar)]]))
 
 (defn spaningar-new []
-  (common "Create spaning"
+  (common "Create get"
           [:div {:class "spaning new"} "Create new spaning."
            (form/form-to 
             [:post "/spaningar"]
@@ -234,7 +234,7 @@
            ]))
 
 (defn spaning [s]
-  (common "Spaningar"
+  (common "Gets"
           [:div
            [:p "Nu haru skapat en spaning "]
            [:p 
@@ -243,7 +243,7 @@
             [:a {:href "/spaningar"} "Alla"]]]))
 
 (defn spaning-deleted [s]
-  (common "Spaningar"
+  (common "Gets"
           [:div "Hej"
            [:p "Borttaggen"]
            [:p s]
