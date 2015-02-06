@@ -49,7 +49,7 @@
   (common "Act Get"
           [:div {:class "index"}
            [:p
-            [:a {:href "/spaningar"} "Spaningar"]]
+            [:a {:href "/spaningar"} "Gets"]]
            (form/form-to 
             [:post "/tags"]
             (form/label "tagname" "Tagname:")
@@ -93,8 +93,9 @@
   (common (str "Tag: " tagname)
           [:div
            [:h1 tagname]
-           [:p "Total number of media: " media-count]
-           [:p "Number of media this page: " (count media)]
+           [:div {:class "media-header"}
+            [:p (:title tagname)]
+            [:p "Total number of media: " media-count]]
            (show-media media)
            (show-pagination next-page (str "/tags/" tagname) (count media))]))
 
@@ -142,8 +143,9 @@
 (defn location [location media-count media next-page]
   (common "Location media"
    [:div
-    [:p "Titel:" (:title location)]
-    [:p "Total number of media: " media-count]
+    [:div {:class "media-header"}
+     [:p (:title location)]
+     [:p "Total number of media: " media-count]]
     [:ul
      (show-media media)]
     (show-pagination next-page (location-media-route location) (count media))]))
@@ -178,8 +180,7 @@
   [:li 
    [:p {:class "title"} "Title: " (:title s)]
    [:p "Type: " (:type s)]
-   [:p "Tag: "
-    [:a {:href (tags-route (:tagname s))} (:tagname s)]]
+   [:p "Tag: " (:tagname s)]
    [:p "Start date: " (:start_date s)]
    [:p "End date: -"]
    [:p "Latitud: " (:lat s)]

@@ -63,7 +63,6 @@ input {
     margin-top: 0;
     margin-bottom: 0;
     font-size: 2.0em;
-    letter-spacing: .2em;
     font-weight: bold;
 }
 
@@ -95,7 +94,9 @@ input {
 
 /* Media list */
 
-.medias {
+.media-header {
+    font-size: 24px;
+    color: #666666;
 }
 
 /* Media item */
@@ -128,9 +129,7 @@ input {
     display: inline-block;
     font-weight: bold;
     text-transform: uppercase;
-    color: #696969;
     border-bottom: 1px solid #ccc;
-    font-size: 16px;
 }
 
 .metadata .created-date {
@@ -139,27 +138,20 @@ input {
 .metadata .see-more {
     font-weight: bold;
     text-transform: uppercase;
-    color: #696969;
     border-bottom: 1px solid #ccc;
-    font-size: 16px;
-}
-
-.metadata .likes,
-.metadata .comments,
-.metadata .tags {
-    color: #696969;
+    color: #666666;
     font-size: 14px;
 }
 
-.metadata .likes,
-.metadata .comments,
-.metadata .tags,
-.metadata .created-date,
-.metadate .see-more {
+.metadata .likes, .metadata .comments, .metadata .tags, .metadata .created-date, .metadate .see-more {
+    color: #666666;
     margin-top: 5px;
+    font-size: 14px;
 }
 .metadata .user {
+    color: #666666;
     margin-bottom: 5px;
+    font-size: 14px;
 }
 
 /* Comments */
@@ -220,6 +212,7 @@ input {
     font-weight: bold;
     font-size: 30px;
     margin: 5px 0;
+    padding-bottom: 15px;
     color: #262626;
     border-bottom: 1px solid #ccc;
 }
@@ -230,6 +223,7 @@ input {
     padding: 10px;
     border-bottom: 1px solid #ccc;
 }
+
 .spaningar li p {
     margin: 10px 0;
 }
@@ -249,9 +243,11 @@ input {
 }
 
 .spaningar li .see-media {
+    font-weight: bold;
     background: #3f7eca;
 }
 
 .spaningar li .remove {
+    font-weight: bold;
     background: #fa1c41;
 }
